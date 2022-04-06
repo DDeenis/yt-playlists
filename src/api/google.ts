@@ -25,3 +25,11 @@ export function authGoogle(cb: (token: GoogleApiOAuth2TokenObject) => void) {
       );
     });
 }
+
+export async function vaidateToken(access_token: string) {
+  const response = await fetch(
+    `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`
+  );
+
+  return response?.ok;
+}

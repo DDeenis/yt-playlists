@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { authGoogle } from "../api/google";
+import { authGoogle, vaidateToken } from "../api/google";
 import { isAuthAtom, userTokenAtom } from "../store/auth";
 
 export const useGoogleAuth = () => {
@@ -13,7 +13,9 @@ export const useGoogleAuth = () => {
       const storedToken = localStorage.getItem("token");
 
       if (storedToken !== null) {
-        setToken(JSON.parse(storedToken));
+        const token = JSON.parse(storedToken);
+        setToken(token);
+        gapi.client.setToken(token);
       } else {
         authGoogle((token) => {
           const tokenCopy = JSON.parse(JSON.stringify(token));
@@ -26,3 +28,29 @@ export const useGoogleAuth = () => {
     });
   };
 };
+
+export function useTryLogin() {
+  const setIsAuth = useSetRecoilState(isAuthAtom);
+  const setToken = useSetRecoilState(userTokenAtom);
+
+  return () =>
+    window.gapi.load("client", async () => {
+      const storedToken = localStorage.getItem("token");
+
+      if (storedToken === null) {
+        return;
+      }
+
+      const token: GoogleApiOAuth2TokenObject = JSON.parse(storedToken);
+      const isValid = await vaidateToken(token.access_token);
+
+      if (isValid) {
+        setToken(token);
+        window.gapi.client.setToken(token);
+        window.gapi.client.load("youtube", "v3", () => setIsAuth(true));
+      } else {
+        setIsAuth(false);
+        localStorage.removeItem("token");
+      }
+    });
+}

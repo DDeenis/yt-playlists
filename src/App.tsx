@@ -6,28 +6,27 @@ import {
   Box,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { getPlaylists } from "./api/youtube";
-import { useGoogleAuth } from "./hooks/auth";
-import { isAuthAtom, userTokenAtom } from "./store/auth";
+import { useGoogleAuth, useTryLogin } from "./hooks/auth";
+import { usePlaylists } from "./hooks/youtube";
+import { isAuthAtom } from "./store/auth";
 
 function App() {
   const auth = useGoogleAuth();
+  const tryLogin = useTryLogin();
+  const { playlists, loadPlaylists } = usePlaylists();
 
-  const token = useRecoilValue(userTokenAtom);
   const isAuth = useRecoilValue(isAuthAtom);
   const [playlistsStr, setPlaylistsStr] = useState("");
-  const [playlists, setPlaylists] = useState<gapi.client.youtube.Playlist[]>();
+
+  useEffect(() => {
+    tryLogin();
+  });
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
     setPlaylistsStr(e.target.value);
-
-  const loadPlaylists = () => {
-    getPlaylists(playlistsStr.split("\n"), (res) =>
-      setPlaylists(res.result.items)
-    );
-  };
+  const onClick = () => loadPlaylists(playlistsStr.split("\n"));
 
   return (
     <Container maxW="container.xl" bg="gray.700" minH="100vh">
@@ -41,12 +40,16 @@ function App() {
         value={playlistsStr}
         onChange={onChange}
       />
-      <Button onClick={loadPlaylists}>Confirm</Button>
-      {!isAuth && <Button onClick={auth}>Auth</Button>}
+      <Button onClick={onClick}>Confirm</Button>
+      {!isAuth && (
+        <Button onClick={auth} ml="8">
+          Auth
+        </Button>
+      )}
       {Boolean(playlists) && (
         <Box display={"flex"} flexDir="column" gap={"6"}>
           {playlists?.map((p) => (
-            <Box display={"flex"} gap={"3"}>
+            <Box display={"flex"} gap={"3"} key={p.id}>
               <Image
                 w="60px"
                 h="60px"
