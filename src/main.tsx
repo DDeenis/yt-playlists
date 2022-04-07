@@ -8,7 +8,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ChakraProvider resetCSS>
+      <ChakraProvider>
         <App />
       </ChakraProvider>
     </RecoilRoot>

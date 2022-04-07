@@ -1,13 +1,60 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* .fancy-border {
+  --border-width: 3px;
+  --border-radius: 4px;
+  --bg-color: white;
+
+  border: double var(--border-width) transparent;
+  border-radius: var(--border-radius);
+  background-image: linear-gradient(var(--bg-color), var(--bg-color)),
+    linear-gradient(
+      45deg,
+      rgba(54, 45, 234, 1) 0%,
+      rgba(216, 63, 224, 1) 50%,
+      rgba(255, 0, 50, 1) 100%
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-sizing: content-box;
+} */
+
+.fancy-btn {
+  --border-width: 3px;
+  --border-radius: 4px;
+
+  position: relative;
+  border: solid var(--border-width) transparent;
+  border-radius: var(--border-radius);
+  background-clip: padding-box;
+  background-color: black;
+  color: white;
+  padding: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.fancy-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: calc(var(--border-width) - var(--border-width) * 2);
+  border-radius: var(--border-radius);
+  z-index: -1;
+  background-image: linear-gradient(
+    45deg,
+    rgba(54, 45, 234, 1) 0%,
+    rgba(216, 63, 224, 1) 50%,
+    rgba(255, 0, 50, 1) 100%
+  );
+}
+
+.fancy-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
