@@ -20,11 +20,12 @@ export const useGoogleAuth = () => {
         authGoogle((token) => {
           const tokenCopy = JSON.parse(JSON.stringify(token));
           setToken(tokenCopy);
+          setIsAuth(true);
           localStorage.setItem("token", JSON.stringify(token));
         });
       }
 
-      gapi.client.load("youtube", "v3", () => setIsAuth(true));
+      gapi.client.load("youtube", "v3");
     });
   };
 };

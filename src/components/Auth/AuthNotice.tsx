@@ -3,7 +3,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { useGoogleAuth } from "../../hooks/auth";
 import { isAuthAtom } from "../../store/auth";
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { CheckCircleIcon, LockIcon } from "@chakra-ui/icons";
 
 export const AuthNotice = () => {
   const auth = useGoogleAuth();
@@ -26,11 +26,16 @@ export const AuthNotice = () => {
         <Button
           onClick={auth}
           w="100%"
+          h="56px"
           color={"white"}
-          bg="gray.600"
-          _hover={{ bg: "gray.500" }}
-          _active={{ bg: "gray.500" }}
+          bg="gray.700"
+          _hover={{ bg: "gray.600" }}
+          _active={{ bg: "gray.600" }}
+          position="absolute"
+          inset={0}
+          borderTopRadius={0}
         >
+          <LockIcon color="white" mr="3" />
           Auth with Google
         </Button>
       ) : (
