@@ -31,5 +31,5 @@ export async function vaidateToken(access_token: string) {
     `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`
   );
 
-  return response?.ok;
+  return Boolean(response?.ok);
 }

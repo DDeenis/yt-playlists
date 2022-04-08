@@ -1,23 +1,11 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AuthNotice } from "./components/Auth/AuthNotice";
-import { LoadPlaylists } from "./components/Layout/LoadPlaylists";
-import { linksToIds } from "./helpers/playlists";
-import { useGoogleAuth, useTryLogin } from "./hooks/auth";
-import { isAuthAtom } from "./store/auth";
-import { playlistsIdsBuffer } from "./store/playlists";
+import { Route, Routes } from "react-router-dom";
+import { useTryLogin } from "./hooks/auth";
+import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
 
 function App() {
   const tryLogin = useTryLogin();
-  const authGoole = useGoogleAuth();
-  const setPlaysistsBuffer = useSetRecoilState(playlistsIdsBuffer);
-  const isAuth = useRecoilValue(isAuthAtom);
-
-  const setBufferIds = (urls: string[]) =>
-    isAuth
-      ? setPlaysistsBuffer(linksToIds(urls))
-      : authGoole().then(() => setPlaysistsBuffer(linksToIds(urls)));
 
   useEffect(() => {
     tryLogin();
@@ -25,10 +13,9 @@ function App() {
 
   return (
     <Box w="100%" bg="black" minH="100vh" as="main">
-      <AuthNotice />
-      <Center h="100vh">
-        <LoadPlaylists onConfirm={setBufferIds} />
-      </Center>
+      <Routes>
+        <Route index element={<LoadPlaylistsPage />} />
+      </Routes>
     </Box>
   );
 }
