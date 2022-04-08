@@ -9,23 +9,28 @@ export const useGoogleAuth = () => {
   return () => {
     const gapi = window.gapi;
 
-    gapi.load("client", () => {
-      const storedToken = localStorage.getItem("token");
+    return new Promise((res, rej) => {
+      gapi.load("client", () => {
+        const storedToken = localStorage.getItem("token");
 
-      if (storedToken !== null) {
-        const token = JSON.parse(storedToken);
-        setToken(token);
-        gapi.client.setToken(token);
-      } else {
-        authGoogle((token) => {
-          const tokenCopy = JSON.parse(JSON.stringify(token));
-          setToken(tokenCopy);
+        if (storedToken !== null) {
+          const token = JSON.parse(storedToken);
+          setToken(token);
           setIsAuth(true);
-          localStorage.setItem("token", JSON.stringify(token));
-        });
-      }
+          gapi.client.setToken(token);
+          res(token);
+        } else {
+          authGoogle((token) => {
+            const tokenCopy = JSON.parse(JSON.stringify(token));
+            setToken(tokenCopy);
+            setIsAuth(true);
+            localStorage.setItem("token", JSON.stringify(token));
+            res(token);
+          }).catch(() => rej());
+        }
 
-      gapi.client.load("youtube", "v3");
+        gapi.client.load("youtube", "v3");
+      });
     });
   };
 };

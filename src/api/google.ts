@@ -1,7 +1,7 @@
 import { GOOGLE_API_KEY, GOOGLE_AUTH_KEY } from "../constants";
 
 export function authGoogle(cb: (token: GoogleApiOAuth2TokenObject) => void) {
-  window.gapi.client
+  return window.gapi.client
     .init({
       apiKey: GOOGLE_API_KEY,
       clientId: GOOGLE_AUTH_KEY,
