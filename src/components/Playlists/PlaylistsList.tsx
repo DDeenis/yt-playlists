@@ -1,5 +1,6 @@
 import { Box, Image, Text } from "@chakra-ui/react";
 import React from "react";
+import { PlaylistListEntry } from "./PlaylistListEntry";
 
 type Props = {
   playlists: gapi.client.youtube.Playlist[];
@@ -7,12 +8,9 @@ type Props = {
 
 export const PlaylistsList = ({ playlists }: Props) => {
   return (
-    <Box display={"flex"} flexDir="column" gap={"6"}>
+    <Box className="playlists-grid">
       {playlists?.map((p) => (
-        <Box display={"flex"} gap={"3"} key={p.id}>
-          <Image w="60px" h="60px" src={p.snippet?.thumbnails?.default?.url} />
-          <Text color={"white"}>{p.snippet?.localized?.title}</Text>
-        </Box>
+        <PlaylistListEntry playlist={p} key={p.id} />
       ))}
     </Box>
   );

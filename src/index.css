@@ -60,3 +60,9 @@ body {
 .fancy-btn:hover {
   background-color: #1a202c;
 }
+
+.playlists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.25rem;
+}

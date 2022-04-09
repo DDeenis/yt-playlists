@@ -40,23 +40,29 @@ export function useTryLogin() {
   const setToken = useSetRecoilState(userTokenAtom);
 
   return () =>
-    window.gapi.load("client", async () => {
-      const storedToken = localStorage.getItem("token");
+    new Promise((res, rej) => {
+      window.gapi.load("client", async () => {
+        const storedToken = localStorage.getItem("token");
 
-      if (storedToken === null) {
-        return;
-      }
+        if (storedToken === null) {
+          return;
+        }
 
-      const token: GoogleApiOAuth2TokenObject = JSON.parse(storedToken);
-      const isValid = await vaidateToken(token.access_token);
+        const token: GoogleApiOAuth2TokenObject = JSON.parse(storedToken);
+        const isValid = await vaidateToken(token.access_token);
 
-      if (isValid) {
-        setToken(token);
-        window.gapi.client.setToken(token);
-        window.gapi.client.load("youtube", "v3", () => setIsAuth(true));
-      } else {
-        setIsAuth(false);
-        localStorage.removeItem("token");
-      }
+        if (isValid) {
+          setToken(token);
+          window.gapi.client.setToken(token);
+          window.gapi.client.load("youtube", "v3", () => {
+            setIsAuth(true);
+            res(token);
+          });
+        } else {
+          setIsAuth(false);
+          localStorage.removeItem("token");
+          rej();
+        }
+      });
     });
 }

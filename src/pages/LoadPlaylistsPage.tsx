@@ -1,28 +1,33 @@
 import { Center } from "@chakra-ui/react";
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { AuthNotice } from "../components/Auth/AuthNotice";
 import { LoadPlaylists } from "../components/Layout/LoadPlaylists";
-import { linksToIds } from "../helpers/playlists";
 import { useGoogleAuth } from "../hooks/auth";
+import { useLocalPlaylistsIds } from "../hooks/storage";
 import { isAuthAtom } from "../store/auth";
-import { playlistsIdsBuffer } from "../store/playlists";
 
 export const LoadPlaylistsPage = () => {
+  const navigate = useNavigate();
   const authGoole = useGoogleAuth();
-  const setPlaysistsBuffer = useSetRecoilState(playlistsIdsBuffer);
+  const { savePlaylistsLinks } = useLocalPlaylistsIds();
   const isAuth = useRecoilValue(isAuthAtom);
 
-  const setBufferIds = (urls: string[]) =>
-    isAuth
-      ? setPlaysistsBuffer(linksToIds(urls))
-      : authGoole().then(() => setPlaysistsBuffer(linksToIds(urls)));
+  const setBufferIds = (urls: string[]) => {
+    savePlaylistsLinks(urls);
+    navigate("/library");
+  };
+
+  const onClick = (urls: string[]) => {
+    isAuth ? setBufferIds(urls) : authGoole().then(() => setBufferIds(urls));
+  };
 
   return (
     <>
       <AuthNotice />
       <Center h="100vh">
-        <LoadPlaylists onConfirm={setBufferIds} />
+        <LoadPlaylists onConfirm={onClick} />
       </Center>
     </>
   );
