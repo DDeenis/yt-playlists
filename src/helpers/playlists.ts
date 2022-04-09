@@ -1,6 +1,8 @@
 export const linksToIds = (links: string[]): string[] => {
-  return links
+  const ids = links
     .map((l) => new URL(l).searchParams.get("list"))
     .map((i) => (i ? i : ""))
     .filter((i) => i !== "");
+  const idsUnique = [...new Set(ids)];
+  return idsUnique;
 };

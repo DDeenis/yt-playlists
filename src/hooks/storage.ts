@@ -14,11 +14,17 @@ export const useLocalPlaylistsIds = () => {
     }
   };
 
-  const savePlaylistsLinks = (urls: string[]) =>
-    savePlaylistsIds(linksToIds(urls));
+  const savePlaylistsLinks = (urls: string[], append = false) =>
+    savePlaylistsIds(linksToIds(urls), append);
 
-  const savePlaylistsIds = (ids: string[]) => {
-    localStorage.setItem("savedPlaylists", JSON.stringify(ids));
+  const savePlaylistsIds = (ids: string[], append = false) => {
+    let idsToSave = ids;
+
+    if (append) {
+      idsToSave = [...new Set([...ids, ...playlistsIds])];
+    }
+
+    localStorage.setItem("savedPlaylists", JSON.stringify(idsToSave));
     reloadPlaylists();
   };
 

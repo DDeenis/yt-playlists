@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { useTryLogin } from "../../hooks/auth";
 import { isAuthAtom } from "../../store/auth";
+import { PageLoader } from "./PageLoader";
 
 type Props = {
   redirectTo: string;
@@ -20,8 +21,7 @@ export const PrivateRoute: React.FC<Props> = ({ redirectTo, children }) => {
   }, []);
 
   if (needLogin === undefined) {
-    // TODO: add loader component
-    return <span style={{ color: "white" }}>Loading...</span>;
+    return <PageLoader />;
   }
 
   if (needLogin) {
