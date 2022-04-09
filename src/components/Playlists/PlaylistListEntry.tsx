@@ -24,6 +24,7 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
           alt={playlist.snippet?.localized?.title}
           objectFit={"cover"}
           borderRadius={"md"}
+          loading="lazy"
         />
       </Link>
       <Link to={playlistLink}>

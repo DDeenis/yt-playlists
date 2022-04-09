@@ -45,6 +45,7 @@ export function useTryLogin() {
         const storedToken = localStorage.getItem("token");
 
         if (storedToken === null) {
+          rej();
           return;
         }
 

@@ -1,6 +1,7 @@
 import { Box, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { PlaylistListEntry } from "./PlaylistListEntry";
+import "./styles.css";
 
 type Props = {
   playlists: gapi.client.youtube.Playlist[];

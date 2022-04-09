@@ -1,5 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import React from "react";
+import "./styles.css";
 
 export const PageLoader = () => {
   return (

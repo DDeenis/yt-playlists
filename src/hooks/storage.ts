@@ -18,7 +18,7 @@ export const useLocalPlaylistsIds = () => {
     savePlaylistsIds(linksToIds(urls), append);
 
   const savePlaylistsIds = (ids: string[], append = false) => {
-    let idsToSave = ids;
+    let idsToSave = [...new Set(ids)];
 
     if (append) {
       idsToSave = [...new Set([...ids, ...playlistsIds])];
