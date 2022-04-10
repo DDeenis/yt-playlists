@@ -5,6 +5,7 @@ import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { useTryLogin } from "./hooks/auth";
 import { LibraryPage } from "./pages/LibraryPage";
 import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
+import { LoginPage } from "./pages/LoginPage";
 
 function App() {
   const tryLogin = useTryLogin();
@@ -17,10 +18,11 @@ function App() {
     <Box w="100%" bg="black" minH="100vh" as="main">
       <Routes>
         <Route index element={<LoadPlaylistsPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route
           path="/library"
           element={
-            <PrivateRoute redirectTo="/">
+            <PrivateRoute then="/library">
               <LibraryPage />
             </PrivateRoute>
           }

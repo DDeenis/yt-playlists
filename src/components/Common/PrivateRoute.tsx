@@ -4,10 +4,15 @@ import { useTryLogin } from "../../hooks/auth";
 import { PageLoader } from "./PageLoader";
 
 type Props = {
-  redirectTo: string;
+  redirectTo?: string;
+  then?: string;
 };
 
-export const PrivateRoute: React.FC<Props> = ({ redirectTo, children }) => {
+export const PrivateRoute: React.FC<Props> = ({
+  redirectTo,
+  then,
+  children,
+}) => {
   const [needLogin, setNeedLogin] = useState<boolean>();
   const tryLogin = useTryLogin();
 
@@ -22,7 +27,8 @@ export const PrivateRoute: React.FC<Props> = ({ redirectTo, children }) => {
   }
 
   if (needLogin) {
-    return <Navigate to={redirectTo} />;
+    const url = redirectTo ? redirectTo : `/login?then=${then}`;
+    return <Navigate to={url} />;
   }
 
   return <>{children}</>;
