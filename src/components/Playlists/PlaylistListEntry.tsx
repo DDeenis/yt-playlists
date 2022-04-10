@@ -15,7 +15,14 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
   const imgUrl = preferredImg ? preferredImg : fallbackImg;
 
   return (
-    <Box display={"flex"} flexDir="column" maxW={160}>
+    <Box
+      display={"flex"}
+      flexDir={"column"}
+      maxW={160}
+      position={"relative"}
+      className="playlist-list-item"
+    >
+      <div className="playlist-overlay" />
       <Link to={playlistLink} style={{ marginBottom: "8px" }}>
         <Image
           w={"100%"}

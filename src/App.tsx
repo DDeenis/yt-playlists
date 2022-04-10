@@ -10,7 +10,7 @@ function App() {
   const tryLogin = useTryLogin();
 
   useEffect(() => {
-    tryLogin();
+    tryLogin().catch(() => console.log("Authomatic auth was not successfull"));
   }, []);
 
   return (

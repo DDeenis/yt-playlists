@@ -18,18 +18,16 @@ export const useGoogleAuth = () => {
           setToken(token);
           setIsAuth(true);
           gapi.client.setToken(token);
-          res(token);
+          gapi.client.load("youtube", "v3", () => res(token));
         } else {
           authGoogle((token) => {
             const tokenCopy = JSON.parse(JSON.stringify(token));
             setToken(tokenCopy);
             setIsAuth(true);
             localStorage.setItem("token", JSON.stringify(token));
-            res(token);
+            gapi.client.load("youtube", "v3", () => res(token));
           }).catch(() => rej());
         }
-
-        gapi.client.load("youtube", "v3");
       });
     });
   };
