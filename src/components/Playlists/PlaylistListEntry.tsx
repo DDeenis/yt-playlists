@@ -22,7 +22,7 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
       position={"relative"}
       className="playlist-list-item"
     >
-      <div className="playlist-overlay" />
+      <Box className="playlist-overlay"></Box>
       <Link to={playlistLink} style={{ marginBottom: "8px" }}>
         <Image
           w={"100%"}
