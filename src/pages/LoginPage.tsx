@@ -1,6 +1,6 @@
-import { LockIcon } from "@chakra-ui/icons";
 import { Box, Button, Center, Text } from "@chakra-ui/react";
 import React from "react";
+import { FaUserLock } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGoogleAuth } from "../hooks/auth";
 
@@ -38,8 +38,10 @@ export const LoginPage = () => {
           bg="gray.700"
           _hover={{ bg: "gray.600" }}
           _active={{ bg: "gray.600" }}
+          display={"flex"}
+          gap={"3"}
         >
-          <LockIcon color="white" mr="3" />
+          <FaUserLock />
           Auth with Google
         </Button>
       </Box>

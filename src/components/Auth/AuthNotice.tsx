@@ -3,7 +3,8 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { useGoogleAuth } from "../../hooks/auth";
 import { isAuthAtom } from "../../store/auth";
-import { CheckCircleIcon, LockIcon } from "@chakra-ui/icons";
+import { FaCheckCircle, FaUserLock, FaLockOpen } from "react-icons/fa";
+import "./styles.css";
 
 export const AuthNotice = () => {
   const auth = useGoogleAuth();
@@ -35,7 +36,7 @@ export const AuthNotice = () => {
           inset={0}
           borderTopRadius={0}
         >
-          <LockIcon color="white" mr="3" />
+          <FaUserLock />
           Auth with Google
         </Button>
       ) : (
@@ -45,8 +46,9 @@ export const AuthNotice = () => {
           display={"flex"}
           justifyContent="center"
           alignItems={"center"}
+          gap={"3"}
         >
-          <CheckCircleIcon color="green.500" mr="3" w="5" h="5" />
+          <FaLockOpen className="fill-green" />
           Authentificated with Google
         </Text>
       )}
