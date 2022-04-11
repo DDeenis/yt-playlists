@@ -5,15 +5,24 @@ import { Link } from "react-router-dom";
 
 type Props = {
   playlist: gapi.client.youtube.Playlist;
+  onRemove: (id: string) => void;
 };
 
-export const PlaylistListEntry = ({ playlist }: Props) => {
+export const PlaylistListEntry = ({ playlist, onRemove }: Props) => {
   const playlistLink = `/playlist/${playlist.id}`;
   const channelLink = `https://www.youtube.com/channel/${playlist.snippet?.channelId}`;
 
   const preferredImg = playlist.snippet?.thumbnails?.maxres?.url;
   const fallbackImg = playlist.snippet?.thumbnails?.high?.url;
   const imgUrl = preferredImg ? preferredImg : fallbackImg;
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (playlist.id) {
+      onRemove(playlist.id);
+    }
+  };
 
   return (
     <Box
@@ -46,6 +55,11 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
             variant={"ghost"}
             color={"white"}
             p={0}
+            pointerEvents={"all"}
+            zIndex={10}
+            _hover={{ bg: "transparent" }}
+            _active={{ bg: "transparent" }}
+            onClick={handleClick}
           />
         </Box>
       </Link>

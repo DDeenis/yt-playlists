@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { getPlaylistsById, getPlaylistVideos } from "../api/youtube";
 import { playlistsIdsBuffer } from "../store/playlists";
+import { useLocalPlaylistsIds } from "./storage";
 
 export const usePlaylists = () => {
   const [playlists, setPlaylists] = useState<gapi.client.youtube.Playlist[]>();
@@ -10,7 +11,39 @@ export const usePlaylists = () => {
     getPlaylistsById(ids).then((res) => setPlaylists(res.result.items));
   };
 
-  return { playlists, loadPlaylists };
+  return { playlists, setPlaylists, loadPlaylists };
+};
+
+export const useSavedPlaylists = () => {
+  const { playlists, setPlaylists, loadPlaylists } = usePlaylists();
+  const { playlistsIds } = useLocalPlaylistsIds();
+  const { addPlaylist, removePlaylist: removePlaylistBase } =
+    usePlaylistsTools();
+  const playlistsCountRef = useRef<number>(0);
+
+  const removePlaylist = (id: string) => {
+    removePlaylistBase(id);
+    setPlaylists(playlists?.filter((p) => p.id !== id));
+  };
+
+  useEffect(() => {
+    // don't refresh if playlist removed
+    if (playlistsCountRef.current > playlistsIds.length) {
+      return;
+    } else {
+      playlistsCountRef.current = playlistsIds.length;
+    }
+
+    if (playlistsIds.length > 0) {
+      loadPlaylists(playlistsIds);
+    }
+  }, [playlistsIds.length]);
+
+  return {
+    playlists,
+    addPlaylist,
+    removePlaylist,
+  };
 };
 
 export const usePlaylistItems = () => {
@@ -31,12 +64,17 @@ export const usePlaylistsTools = () => {
 
   const addPlaylist = (id: string) => {
     if (playlistsIds.includes(id)) return;
-    setPlaylistsIds([...playlistsIds, id]);
+    save([...playlistsIds, id]);
   };
 
   const removePlaylist = (id: string) => {
     if (!playlistsIds.includes(id)) return;
-    setPlaylistsIds(playlistsIds.filter((i) => i !== id));
+    save(playlistsIds.filter((i) => i !== id));
+  };
+
+  const save = (newIds: string[]) => {
+    setPlaylistsIds(newIds);
+    localStorage.setItem("savedPlaylists", JSON.stringify(newIds));
   };
 
   return {

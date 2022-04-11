@@ -5,13 +5,14 @@ import "./styles.css";
 
 type Props = {
   playlists: gapi.client.youtube.Playlist[];
+  removePlaylist: (id: string) => void;
 };
 
-export const PlaylistsList = ({ playlists }: Props) => {
+export const PlaylistsList = ({ playlists, removePlaylist }: Props) => {
   return (
     <Box className="playlists-grid">
       {playlists?.map((p) => (
-        <PlaylistListEntry playlist={p} key={p.id} />
+        <PlaylistListEntry playlist={p} onRemove={removePlaylist} key={p.id} />
       ))}
     </Box>
   );
