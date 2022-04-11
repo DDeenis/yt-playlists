@@ -1,5 +1,6 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
+import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -22,8 +23,10 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
       position={"relative"}
       className="playlist-list-item"
     >
-      <Box className="playlist-overlay"></Box>
-      <Link to={playlistLink} style={{ marginBottom: "8px" }}>
+      <Link
+        to={playlistLink}
+        style={{ marginBottom: "8px", position: "relative" }}
+      >
         <Image
           w={"100%"}
           h={160}
@@ -33,6 +36,18 @@ export const PlaylistListEntry = ({ playlist }: Props) => {
           borderRadius={"md"}
           loading="lazy"
         />
+        <Box className="playlist-overlay" position={"absolute"}>
+          <IconButton
+            aria-label="Remove playlist"
+            icon={<FaTrashAlt />}
+            position={"absolute"}
+            right={"0"}
+            top={"0"}
+            variant={"ghost"}
+            color={"white"}
+            p={0}
+          />
+        </Box>
       </Link>
       <Link to={playlistLink}>
         <Text

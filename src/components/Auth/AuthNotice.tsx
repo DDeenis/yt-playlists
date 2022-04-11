@@ -3,7 +3,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { useGoogleAuth } from "../../hooks/auth";
 import { isAuthAtom } from "../../store/auth";
-import { FaCheckCircle, FaUserLock, FaLockOpen } from "react-icons/fa";
+import { FaUserLock, FaLockOpen } from "react-icons/fa";
 import "./styles.css";
 
 export const AuthNotice = () => {
