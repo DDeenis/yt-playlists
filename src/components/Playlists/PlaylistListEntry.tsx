@@ -1,6 +1,6 @@
 import { Box, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaPlay, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 type Props = {
@@ -52,14 +52,28 @@ export const PlaylistListEntry = ({ playlist, onRemove }: Props) => {
             position={"absolute"}
             right={"0"}
             top={"0"}
+            isRound
             variant={"ghost"}
             color={"white"}
-            p={0}
             pointerEvents={"all"}
             zIndex={10}
-            _hover={{ bg: "transparent" }}
-            _active={{ bg: "transparent" }}
+            _hover={{ bg: "blackAlpha.300" }}
+            _active={{ bg: "blackAlpha.300" }}
             onClick={handleClick}
+          />
+          <IconButton
+            aria-label={"Play playlist"}
+            icon={<FaPlay />}
+            position={"absolute"}
+            right={"2"}
+            bottom={"2"}
+            isRound
+            color={"white"}
+            bg={"blackAlpha.800"}
+            pointerEvents={"all"}
+            zIndex={10}
+            _hover={{ bg: "blackAlpha.700" }}
+            _active={{ bg: "blackAlpha.700" }}
           />
         </Box>
       </Link>
