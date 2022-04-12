@@ -1,6 +1,6 @@
 import { Box, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import { PlaylistListEntry } from "./PlaylistListEntry";
+import { PlaylistEntry } from "./PlaylistEntry";
 import "./styles.css";
 
 type Props = {
@@ -12,7 +12,7 @@ export const PlaylistsList = ({ playlists, removePlaylist }: Props) => {
   return (
     <Box className="playlists-grid">
       {playlists?.map((p) => (
-        <PlaylistListEntry playlist={p} onRemove={removePlaylist} key={p.id} />
+        <PlaylistEntry playlist={p} onRemove={removePlaylist} key={p.id} />
       ))}
     </Box>
   );

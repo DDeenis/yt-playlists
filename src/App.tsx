@@ -6,6 +6,7 @@ import { useTryLogin } from "./hooks/auth";
 import { LibraryPage } from "./pages/LibraryPage";
 import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
 import { LoginPage } from "./pages/LoginPage";
+import { PlaylistPage } from "./pages/PlaylistPage";
 
 function App() {
   const tryLogin = useTryLogin();
@@ -24,6 +25,14 @@ function App() {
           element={
             <PrivateRoute then="/library">
               <LibraryPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/playlist/:id"
+          element={
+            <PrivateRoute then="/library">
+              <PlaylistPage />
             </PrivateRoute>
           }
         />

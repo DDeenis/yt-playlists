@@ -23,10 +23,18 @@ export const getPlaylistsById = async (ids: string[]) => {
   });
 };
 
-export const getPlaylistVideos = (playlistId: string) => {
+export const getPlaylistItems = (playlistId: string) => {
   return window.gapi.client.youtube.playlistItems.list({
-    part: ["id", "snippet", "contentDetails", "status"].join(","),
+    part: ["id", "snippet", "contentDetails"].join(","),
     playlistId,
+    maxResults: 50,
+  });
+};
+
+export const getPlaylistVideos = (ids: string[]) => {
+  return window.gapi.client.youtube.videos.list({
+    part: ["snippet", "contentDetails"].join(","),
+    id: ids.join(","),
     maxResults: 50,
   });
 };

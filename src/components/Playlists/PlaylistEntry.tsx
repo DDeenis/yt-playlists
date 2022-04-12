@@ -8,7 +8,7 @@ type Props = {
   onRemove: (id: string) => void;
 };
 
-export const PlaylistListEntry = ({ playlist, onRemove }: Props) => {
+export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
   const playlistLink = `/playlist/${playlist.id}`;
   const channelLink = `https://www.youtube.com/channel/${playlist.snippet?.channelId}`;
 

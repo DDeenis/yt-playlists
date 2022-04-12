@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { getPlaylistsById, getPlaylistVideos } from "../api/youtube";
+import {
+  getPlaylistsById,
+  getPlaylistItems,
+  getPlaylistVideos,
+} from "../api/youtube";
 import { playlistsIdsBuffer } from "../store/playlists";
 import { useLocalPlaylistsIds } from "./storage";
 
@@ -51,12 +55,34 @@ export const usePlaylistItems = () => {
     useState<gapi.client.youtube.PlaylistItem[]>();
 
   const loadItems = (playlistId: string) => {
-    getPlaylistVideos(playlistId).then((res) =>
-      setPlaylistsItems(res.result.items)
-    );
+    getPlaylistItems(playlistId).then((res) => {
+      setPlaylistsItems(res.result.items);
+    });
   };
 
   return { playlistItems, loadItems };
+};
+
+export const usePlaylistVideos = () => {
+  const [playlistVideos, setPlaylistsVideos] =
+    useState<gapi.client.youtube.Video[]>();
+
+  const loadVideos = (playlistId: string) => {
+    getPlaylistItems(playlistId).then((res) => {
+      const ids = res.result.items
+        ?.map((i) =>
+          i.snippet?.resourceId?.videoId ? i.snippet?.resourceId?.videoId : ""
+        )
+        .filter((i) => i !== "");
+      if (ids) {
+        getPlaylistVideos(ids).then((res) =>
+          setPlaylistsVideos(res.result.items)
+        );
+      }
+    });
+  };
+
+  return { playlistVideos, loadVideos };
 };
 
 export const usePlaylistsTools = () => {
