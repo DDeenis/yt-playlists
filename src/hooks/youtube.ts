@@ -18,6 +18,18 @@ export const usePlaylists = () => {
   return { playlists, setPlaylists, loadPlaylists };
 };
 
+export const usePlaylist = () => {
+  const [playlist, setPlaylist] = useState<gapi.client.youtube.Playlist>();
+
+  const loadPlaylist = (id: string) => {
+    return getPlaylistsById([id]).then((res) =>
+      setPlaylist(res.result.items?.[0])
+    );
+  };
+
+  return { playlist, loadPlaylist };
+};
+
 export const useSavedPlaylists = () => {
   const { playlists, setPlaylists, loadPlaylists } = usePlaylists();
   const { playlistsIds } = useLocalPlaylistsIds();
@@ -55,7 +67,7 @@ export const usePlaylistItems = () => {
     useState<gapi.client.youtube.PlaylistItem[]>();
 
   const loadItems = (playlistId: string) => {
-    getPlaylistItems(playlistId).then((res) => {
+    return getPlaylistItems(playlistId).then((res) => {
       setPlaylistsItems(res.result.items);
     });
   };
@@ -68,7 +80,7 @@ export const usePlaylistVideos = () => {
     useState<gapi.client.youtube.Video[]>();
 
   const loadVideos = (playlistId: string) => {
-    getPlaylistItems(playlistId).then((res) => {
+    return getPlaylistItems(playlistId).then((res) => {
       const ids = res.result.items
         ?.map((i) =>
           i.snippet?.resourceId?.videoId ? i.snippet?.resourceId?.videoId : ""

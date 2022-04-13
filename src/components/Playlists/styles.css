@@ -21,3 +21,11 @@
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
+
+.playlist-info-layout {
+  display: grid;
+  grid-template-areas: "image info" "image actions";
+  grid-template-columns: 264px 1fr;
+  column-gap: min(2rem, 4vw);
+  row-gap: 1rem;
+}
