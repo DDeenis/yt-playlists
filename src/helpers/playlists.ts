@@ -16,14 +16,52 @@ export const formatVideoDuration = (source?: string): string => {
   }
 
   const reg = /PT(\d+)*M(\d+)*S/gm;
+  const regFallback = /PT(\d+)*S/gm;
   const result = reg.exec(source);
+  const resultFallback = regFallback.exec(source);
 
-  if (!result) {
+  if (!result && !resultFallback) {
     return formatTime(0, 0);
   }
 
-  const minutes = parseInt(result[1]);
-  const seconds = parseInt(result[2]);
+  let minutes = 0;
+  let seconds = 0;
+
+  if (result) {
+    minutes = parseInt(result[1]);
+    seconds = parseInt(result[2]);
+  } else if (resultFallback) {
+    minutes = 0;
+    seconds = parseInt(resultFallback[1]);
+  }
 
   return formatTime(minutes, seconds);
+};
+
+export const durationToSeconds = (source?: string): number => {
+  if (!source) {
+    return 0;
+  }
+
+  const reg = /PT(\d+)*M(\d+)*S/gm;
+  const regFallback = /PT(\d+)*S/gm;
+  const result = reg.exec(source);
+  const resultFallback = regFallback.exec(source);
+
+  if (!result && !resultFallback) {
+    return 0;
+  }
+
+  let minutes = 0;
+  let seconds = 0;
+
+  if (result) {
+    minutes = parseInt(result[1]);
+    seconds = parseInt(result[2]);
+  } else if (resultFallback) {
+    minutes = 0;
+    seconds = parseInt(resultFallback[1]);
+  }
+
+  return minutes * 60 + seconds;
 };

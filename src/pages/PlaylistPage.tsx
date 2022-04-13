@@ -40,7 +40,7 @@ export const PlaylistPage = () => {
         </Box>
       )}
       <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
-      <Player videoId={playingVideo} />
+      <Player videoId={playingVideo} volume={30} />
     </Box>
   ) : (
     <PageLoader />

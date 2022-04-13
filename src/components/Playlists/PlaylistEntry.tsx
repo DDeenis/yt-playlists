@@ -83,7 +83,7 @@ export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
           fontWeight={"semibold"}
           _hover={{ textDecoration: "underline" }}
         >
-          {playlist.snippet?.localized?.title}
+          {playlist.snippet?.title}
         </Text>
       </Link>
       <Box>

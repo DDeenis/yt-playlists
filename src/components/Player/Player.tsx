@@ -1,17 +1,22 @@
 import { Box, IconButton, Text } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Vlitejs from "vlitejs";
 import VlitejsYoutube from "vlitejs/dist/providers/youtube";
 import { CgPlayTrackNext, CgPlayTrackPrev, CgPlayButton } from "react-icons/cg";
-import { FaPlay } from "react-icons/fa";
 import "./styles.css";
 import { useVideo } from "../../hooks/youtube";
-import { formatTime, formatVideoDuration } from "../../helpers/playlists";
+import {
+  durationToSeconds,
+  formatTime,
+  formatVideoDuration,
+} from "../../helpers/playlists";
 
 type Props = {
   videoId?: string;
   volume?: number;
 };
+
+Vlitejs.registerProvider("youtube", VlitejsYoutube);
 
 export const Player = ({ videoId, volume = 50 }: Props) => {
   const playerRef = useRef<any>(null);
@@ -20,47 +25,49 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
   const [playerLoaded, setPlayerLoaded] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
-  const videoDuration = formatVideoDuration(video?.contentDetails?.duration);
+  const videoDurationSeconds = durationToSeconds(
+    video?.contentDetails?.duration
+  );
+  const videoDurationStr = formatVideoDuration(video?.contentDetails?.duration);
   const currentMinutes = Math.floor(currentTime / 60);
   const currentSeconds = currentTime % 60;
 
-  useEffect(() => {
-    try {
-      Vlitejs.registerProvider("youtube", VlitejsYoutube);
-    } catch (error) {
-      console.error("Failed to register youtube provider");
-    }
+  const startVideoInterval = useCallback(() => {
+    setCurrentTime(0);
+    const intervalId = setInterval(() => {
+      if (isPlayingRef.current) {
+        setCurrentTime((val) => val + 1);
+      }
+    }, 1000);
 
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
     // TODO: uncomment after creating a player ui
-    // new Vlitejs("#player", {
-    //   options: {
-    //     autoplay: false,
-    //   },
-    //   onReady: (player: any) => {
-    //     playerRef.current = player.instance;
-    //     player.instance.setVolume(volume);
-    //     setPlayerLoaded(true);
-    //   },
-    //   provider: "youtube",
-    //   plugins: [],
-    // });
+    new Vlitejs("#player", {
+      options: {
+        autoplay: false,
+      },
+      onReady: (player: any) => {
+        playerRef.current = player.instance;
+        player.instance.setVolume(volume);
+        setPlayerLoaded(true);
+      },
+      provider: "youtube",
+      plugins: [],
+    });
   }, []);
 
   useEffect(() => {
     videoId && loadVideo(videoId);
-
-    setCurrentTime(0);
-    const intervalId = setInterval(() => {
-      if (isPlayingRef.current) setCurrentTime((val) => val + 1);
-    }, 1000);
-
-    return () => clearInterval(intervalId);
+    return startVideoInterval();
   }, [videoId]);
 
   useEffect(() => {
     if (playerLoaded && videoId) {
       playerRef.current.loadVideoById(videoId);
-      // isPlayingRef.current = true;
+      isPlayingRef.current = true;
     }
   }, [videoId, playerLoaded]);
 
@@ -69,6 +76,12 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       playerRef.current.setVolume(volume);
     }
   }, [volume, playerLoaded]);
+
+  useEffect(() => {
+    if (currentTime >= videoDurationSeconds) {
+      isPlayingRef.current = false;
+    }
+  }, [currentTime]);
 
   return (
     <Box
@@ -100,7 +113,7 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
             top={"50%"}
             transform={"translateY(-50%)"}
           >
-            {formatTime(currentMinutes, currentSeconds)} / {videoDuration}
+            {formatTime(currentMinutes, currentSeconds)} / {videoDurationStr}
           </Text>
         </Box>
       </Box>
