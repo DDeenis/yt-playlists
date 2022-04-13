@@ -11,7 +11,7 @@ import "./styles.css";
 
 type Props = {
   durationSeconds: number;
-  currentTimeSeconds: number;
+  getCurrentTime: () => number;
   isPlaying: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -19,27 +19,36 @@ type Props = {
 
 export const PlayerLeftControls = ({
   durationSeconds,
-  currentTimeSeconds,
+  getCurrentTime,
   isPlaying,
   onPlay,
   onPause,
 }: Props) => {
-  console.log(isPlaying);
-
-  const [isPlayingState, setIsPlayingState] = useState(isPlaying);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
   const durationMinutes = Math.floor(durationSeconds / 60);
   const durationSecondsLeft = durationSeconds % 60;
 
-  const currentMinutes = Math.floor(currentTimeSeconds / 60);
-  const currentSeconds = currentTimeSeconds % 60;
+  const currentMinutes = Math.floor(currentTime / 60);
+  const currentSeconds = currentTime % 60;
 
   const middleHandler = () => {
-    setIsPlayingState(!isPlayingState);
-    isPlayingState ? onPause() : onPlay();
+    isPlaying ? onPause() : onPlay();
   };
 
-  useEffect(() => setIsPlayingState(isPlaying), [isPlaying]);
+  const startVideoInterval = () => {
+    setCurrentTime(getCurrentTime());
+    const intervalId = setInterval(() => {
+      setCurrentTime(getCurrentTime());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  };
+
+  useEffect(() => {
+    if (isPlaying) {
+      return startVideoInterval();
+    }
+  }, [isPlaying]);
 
   return (
     <Box
@@ -50,7 +59,7 @@ export const PlayerLeftControls = ({
     >
       <CgPlayTrackPrev className="player-next-prev-btn play-controls-btn" />
       <button onClick={middleHandler}>
-        {!isPlayingState ? (
+        {!isPlaying ? (
           <CgPlayButton
             viewBox="5 5 14 14"
             className="player-play-btn play-controls-btn"

@@ -1,15 +1,10 @@
-import { Box, IconButton, Text } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import Vlitejs from "vlitejs";
 import VlitejsYoutube from "vlitejs/dist/providers/youtube";
-import { CgPlayTrackNext, CgPlayTrackPrev, CgPlayButton } from "react-icons/cg";
 import "./styles.css";
 import { useVideo } from "../../hooks/youtube";
-import {
-  durationToSeconds,
-  formatTime,
-  formatVideoDuration,
-} from "../../helpers/playlists";
+import { durationToSeconds } from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
 
 type Props = {
@@ -25,32 +20,26 @@ try {
 
 export const Player = ({ videoId, volume = 50 }: Props) => {
   const playerRef = useRef<any>(null);
-  const isPlayingRef = useRef<boolean>(false);
   const { video, loadVideo } = useVideo();
-  const [playerLoaded, setPlayerLoaded] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const videoDurationSeconds = durationToSeconds(
     video?.contentDetails?.duration
   );
 
-  const startVideoInterval = useCallback(() => {
-    setCurrentTime(0);
-    const intervalId = setInterval(() => {
-      if (isPlayingRef.current) {
-        setCurrentTime((val) => val + 1);
-      }
-    }, 1000);
+  // const getIsPlaying = () => playerRef.current?.getPlayerState() === 1;
+  const getCurrentTime = () => {
+    const time = playerRef.current?.getCurrentTime();
+    return time !== undefined ? Math.ceil(time) : 0;
+  };
 
-    return () => clearInterval(intervalId);
-  }, []);
   const onPlay = () => {
     playerRef.current.playVideo();
-    isPlayingRef.current = true;
+    // setIsPlaying(true);
   };
   const onPause = () => {
     playerRef.current.pauseVideo();
-    isPlayingRef.current = false;
+    // setIsPlaying(false);
   };
 
   useEffect(() => {
@@ -62,7 +51,19 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       onReady: (player: any) => {
         playerRef.current = player.instance;
         player.instance.setVolume(volume);
-        setPlayerLoaded(true);
+
+        player.instance.addEventListener(
+          "onStateChange",
+          function (state: { target: any; data: number }) {
+            const { data } = state;
+
+            if (data === 0 || data === 2) {
+              setIsPlaying(false);
+            } else if (data === 1) {
+              setIsPlaying(true);
+            }
+          }
+        );
       },
       provider: "youtube",
       plugins: [],
@@ -71,27 +72,20 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
 
   useEffect(() => {
     videoId && loadVideo(videoId);
-    return startVideoInterval();
   }, [videoId]);
 
   useEffect(() => {
-    if (playerLoaded && videoId) {
+    if (playerRef.current && videoId) {
       playerRef.current.loadVideoById(videoId);
-      isPlayingRef.current = true;
+      // setIsPlaying(true);
     }
-  }, [videoId, playerLoaded]);
+  }, [videoId]);
 
   useEffect(() => {
-    if (playerLoaded && volume !== undefined) {
+    if (playerRef.current && volume !== undefined) {
       playerRef.current.setVolume(volume);
     }
-  }, [volume, playerLoaded]);
-
-  useEffect(() => {
-    if (currentTime >= videoDurationSeconds) {
-      isPlayingRef.current = false;
-    }
-  }, [currentTime]);
+  }, [volume]);
 
   return (
     <Box
@@ -104,8 +98,8 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
     >
       <PlayerLeftControls
         durationSeconds={videoDurationSeconds}
-        currentTimeSeconds={currentTime}
-        isPlaying={isPlayingRef.current}
+        getCurrentTime={getCurrentTime}
+        isPlaying={isPlaying}
         onPlay={onPlay}
         onPause={onPause}
       />

@@ -12,11 +12,15 @@ export const PlaylistInfoBlock = ({ playlist }: Props) => {
     ? new Date(playlist.snippet?.publishedAt).getFullYear()
     : new Date().getFullYear();
 
+  const preferredImg = playlist.snippet?.thumbnails?.maxres?.url;
+  const fallbackImg = playlist.snippet?.thumbnails?.high?.url;
+  const imgUrl = preferredImg ? preferredImg : fallbackImg;
+
   return (
     <Box w={"100%"} className={"playlist-info-layout"}>
       <Image
         gridArea={"image"}
-        src={playlist.snippet?.thumbnails?.maxres?.url}
+        src={imgUrl}
         w={"264px"}
         h={"264px"}
         objectFit={"cover"}
