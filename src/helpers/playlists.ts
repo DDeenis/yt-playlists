@@ -7,20 +7,23 @@ export const linksToIds = (links: string[]): string[] => {
   return idsUnique;
 };
 
+export const formatTime = (minutes: number, seconds: number) =>
+  `${minutes}:${seconds >= 10 ? seconds : "0" + seconds}`;
+
 export const formatVideoDuration = (source?: string): string => {
   if (!source) {
-    return "0:00";
+    return formatTime(0, 0);
   }
 
   const reg = /PT(\d+)*M(\d+)*S/gm;
   const result = reg.exec(source);
 
   if (!result) {
-    return "0:00";
+    return formatTime(0, 0);
   }
 
   const minutes = parseInt(result[1]);
   const seconds = parseInt(result[2]);
 
-  return `${minutes}:${seconds}`;
+  return formatTime(minutes, seconds);
 };

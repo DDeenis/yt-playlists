@@ -1821,6 +1821,11 @@ use-sidecar@^1.0.1, use-sidecar@^1.0.5:
     detect-node-es "^1.1.0"
     tslib "^1.9.3"
 
+validate-target@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/validate-target/-/validate-target-2.0.0.tgz#b8fb4f8ccbed9503e8316d9f5d419daec82efab6"
+  integrity sha512-ELRDv4dNxEPrwavvk8OSNtyvUYZVqKIo9c3deHBxf8YhnNJMN9qtZJkW1sRCqI7gMElHWjy/AaIyJq/DdsKN2Q==
+
 vite@^2.9.0:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.1.tgz#84bce95fae210a7beb566a0af06246748066b48f"
@@ -1832,6 +1837,13 @@ vite@^2.9.0:
     rollup "^2.59.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vlitejs@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/vlitejs/-/vlitejs-4.0.5.tgz#2d5bf1fdffd4769f26461627a3797be8dabfe260"
+  integrity sha512-Th/o8ARYSXNf1biCeRSB5PiHPyZPw1Nlw0XGAgFaqh/ki3vuU0KrJV0sJ//alLXqNgrqti8tYk0mQ96tuYfa9A==
+  dependencies:
+    validate-target "^2.0.0"
 
 warning@^4.0.3:
   version "4.0.3"

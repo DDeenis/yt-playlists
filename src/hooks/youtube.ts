@@ -97,6 +97,18 @@ export const usePlaylistVideos = () => {
   return { playlistVideos, loadVideos };
 };
 
+export const useVideo = () => {
+  const [video, setVideo] = useState<gapi.client.youtube.Video>();
+
+  const loadVideo = (videoId: string) => {
+    return getPlaylistVideos([videoId]).then((res) =>
+      setVideo(res.result.items?.[0])
+    );
+  };
+
+  return { video, loadVideo };
+};
+
 export const usePlaylistsTools = () => {
   const [playlistsIds, setPlaylistsIds] = useRecoilState(playlistsIdsBuffer);
 

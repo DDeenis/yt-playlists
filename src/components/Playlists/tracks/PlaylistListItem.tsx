@@ -1,12 +1,14 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
+import { FaPlay } from "react-icons/fa";
 import { formatVideoDuration } from "../../../helpers/playlists";
 
 type Props = {
   video: gapi.client.youtube.Video;
+  onPlay: () => void;
 };
 
-export const PlaylistListItem = ({ video }: Props) => {
+export const PlaylistListItem = ({ video, onPlay }: Props) => {
   const channelLink = `https://www.youtube.com/channel/${video.snippet?.channelId}`;
 
   return (
@@ -19,14 +21,23 @@ export const PlaylistListItem = ({ video }: Props) => {
       borderStyle={"solid"}
       borderColor={"gray.800"}
     >
-      <Image
-        src={video.snippet?.thumbnails?.default?.url}
-        alt={video.snippet?.title}
-        w={"48px"}
-        h={"48px"}
-        objectFit={"contain"}
-        mr={"6"}
-      />
+      <Box position={"relative"} mr={"6"} className={"track-image-container"}>
+        <Image
+          src={video.snippet?.thumbnails?.default?.url}
+          alt={video.snippet?.title}
+          w={"48px"}
+          h={"48px"}
+          objectFit={"contain"}
+        />
+        <Box
+          as={"button"}
+          aria-label={"Play track"}
+          className={"track-play-btn"}
+          onClick={onPlay}
+        >
+          <FaPlay />
+        </Box>
+      </Box>
       <Box
         maxW={"50ch"}
         whiteSpace={"pre"}

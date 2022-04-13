@@ -29,3 +29,19 @@
   column-gap: min(2rem, 4vw);
   row-gap: 1rem;
 }
+
+.track-play-btn {
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.track-image-container:hover .track-play-btn {
+  opacity: 1;
+}

@@ -1,7 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PageLoader } from "../components/Common/PageLoader";
+import { Player } from "../components/Player/Player";
 import { PlaylistInfoBlock } from "../components/Playlists/PlaylistInfoBlock";
 import { PlaylistItemsList } from "../components/Playlists/tracks/PlaylistItemsList";
 import { usePlaylist, usePlaylistVideos } from "../hooks/youtube";
@@ -10,6 +11,7 @@ export const PlaylistPage = () => {
   const { id } = useParams();
   const { playlistVideos, loadVideos } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
+  const [playingVideo, setPlayingVideo] = useState<string>();
 
   useEffect(() => {
     if (id) {
@@ -18,6 +20,10 @@ export const PlaylistPage = () => {
     }
   }, []);
 
+  const onPlay = (id?: string) => {
+    setPlayingVideo(id);
+  };
+
   return playlistVideos !== undefined ? (
     <Box maxW={"container.xl"} mx={"auto"} py={"8"}>
       {playlist && (
@@ -25,7 +31,8 @@ export const PlaylistPage = () => {
           <PlaylistInfoBlock playlist={playlist} />
         </Box>
       )}
-      <PlaylistItemsList videos={playlistVideos} />
+      <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
+      <Player videoId={playingVideo} />
     </Box>
   ) : (
     <PageLoader />

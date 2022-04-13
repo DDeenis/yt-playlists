@@ -1,0 +1,18 @@
+.player-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+}
+
+.play-controls-btn {
+  cursor: pointer;
+}
+
+.player-play-btn {
+  width: 48px;
+  height: 48px;
+}
+
+.player-next-prev-btn {
+  width: 28px;
+  height: 28px;
+}
