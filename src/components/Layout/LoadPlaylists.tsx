@@ -1,6 +1,6 @@
 import { Box, Button, Center, Text, Textarea } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { YTButton } from "../Common/FancyButton";
+import { YTButton } from "../Common/YTButton";
 
 type Props = {
   onConfirm: (urls: string[]) => void;

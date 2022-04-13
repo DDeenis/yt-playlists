@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useTryLogin } from "../../hooks/auth";
 import { PageLoader } from "./PageLoader";
 
@@ -8,12 +8,9 @@ type Props = {
   then?: string;
 };
 
-export const PrivateRoute: React.FC<Props> = ({
-  redirectTo,
-  then,
-  children,
-}) => {
+export const PrivateRoute: React.FC<Props> = ({ redirectTo, children }) => {
   const [needLogin, setNeedLogin] = useState<boolean>();
+  const location = useLocation();
   const tryLogin = useTryLogin();
 
   useEffect(() => {
@@ -27,13 +24,10 @@ export const PrivateRoute: React.FC<Props> = ({
   }
 
   if (needLogin) {
+    const then = location.pathname;
     const url = redirectTo
-      ? then
-        ? `${redirectTo}?then=${then}`
-        : redirectTo
-      : then
-      ? `/login?then=${then}`
-      : "/login";
+      ? `${redirectTo}?then=${then}`
+      : `/login?then=${then}`;
     return <Navigate to={url} />;
   }
 

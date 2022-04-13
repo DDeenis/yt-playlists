@@ -23,7 +23,7 @@ function App() {
         <Route
           path="/library"
           element={
-            <PrivateRoute then="/library">
+            <PrivateRoute>
               <LibraryPage />
             </PrivateRoute>
           }
@@ -31,7 +31,7 @@ function App() {
         <Route
           path="/playlist/:id"
           element={
-            <PrivateRoute then="/library">
+            <PrivateRoute>
               <PlaylistPage />
             </PrivateRoute>
           }
