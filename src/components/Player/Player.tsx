@@ -47,9 +47,13 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
   const onPause = () => {
     playerRef.current.pauseVideo();
   };
+  const onSeek = (seconds: number) => {
+    console.log(seconds);
+
+    playerRef.current.seekTo(seconds, true);
+  };
 
   useEffect(() => {
-    // TODO: uncomment after creating a player ui
     new Vlitejs("#player", {
       options: {
         autoplay: false,
@@ -108,6 +112,7 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       <PlayerProgressBar
         durationSeconds={videoDurationSeconds}
         currentTimeSeconds={currentTime}
+        onSeek={onSeek}
       />
       <PlayerLeftControls
         durationSeconds={videoDurationSeconds}
