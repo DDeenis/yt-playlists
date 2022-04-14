@@ -6,6 +6,7 @@ import "./styles.css";
 import { useVideo } from "../../hooks/youtube";
 import { durationToSeconds } from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
+import { PlayerProgressBar } from "./PlayerProgressBar";
 
 type Props = {
   videoId?: string;
@@ -22,24 +23,29 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
   const playerRef = useRef<any>(null);
   const { video, loadVideo } = useVideo();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
   const videoDurationSeconds = durationToSeconds(
     video?.contentDetails?.duration
   );
 
-  // const getIsPlaying = () => playerRef.current?.getPlayerState() === 1;
   const getCurrentTime = () => {
     const time = playerRef.current?.getCurrentTime();
     return time !== undefined ? Math.ceil(time) : 0;
   };
+  const startVideoInterval = () => {
+    setCurrentTime(getCurrentTime());
+    const intervalId = setInterval(() => {
+      setCurrentTime(getCurrentTime());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  };
 
   const onPlay = () => {
     playerRef.current.playVideo();
-    // setIsPlaying(true);
   };
   const onPause = () => {
     playerRef.current.pauseVideo();
-    // setIsPlaying(false);
   };
 
   useEffect(() => {
@@ -72,12 +78,9 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
 
   useEffect(() => {
     videoId && loadVideo(videoId);
-  }, [videoId]);
 
-  useEffect(() => {
     if (playerRef.current && videoId) {
       playerRef.current.loadVideoById(videoId);
-      // setIsPlaying(true);
     }
   }, [videoId]);
 
@@ -86,6 +89,12 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       playerRef.current.setVolume(volume);
     }
   }, [volume]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      return startVideoInterval();
+    }
+  }, [isPlaying]);
 
   return (
     <Box
@@ -96,9 +105,13 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       px={"8"}
       className={"player-layout"}
     >
+      <PlayerProgressBar
+        durationSeconds={videoDurationSeconds}
+        currentTimeSeconds={currentTime}
+      />
       <PlayerLeftControls
         durationSeconds={videoDurationSeconds}
-        getCurrentTime={getCurrentTime}
+        currentTimeSeconds={currentTime}
         isPlaying={isPlaying}
         onPlay={onPlay}
         onPause={onPause}

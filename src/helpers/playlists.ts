@@ -65,3 +65,13 @@ export const durationToSeconds = (source?: string): number => {
 
   return minutes * 60 + seconds;
 };
+
+export const convertToRange = (
+  num: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number
+) => {
+  return ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+};

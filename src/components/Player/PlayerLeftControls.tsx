@@ -11,7 +11,7 @@ import "./styles.css";
 
 type Props = {
   durationSeconds: number;
-  getCurrentTime: () => number;
+  currentTimeSeconds: number;
   isPlaying: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -19,36 +19,20 @@ type Props = {
 
 export const PlayerLeftControls = ({
   durationSeconds,
-  getCurrentTime,
+  currentTimeSeconds,
   isPlaying,
   onPlay,
   onPause,
 }: Props) => {
-  const [currentTime, setCurrentTime] = useState<number>(0);
-
   const durationMinutes = Math.floor(durationSeconds / 60);
   const durationSecondsLeft = durationSeconds % 60;
 
-  const currentMinutes = Math.floor(currentTime / 60);
-  const currentSeconds = currentTime % 60;
+  const currentMinutes = Math.floor(currentTimeSeconds / 60);
+  const currentSeconds = currentTimeSeconds % 60;
 
   const middleHandler = () => {
     isPlaying ? onPause() : onPlay();
   };
-
-  const startVideoInterval = () => {
-    setCurrentTime(getCurrentTime());
-    const intervalId = setInterval(() => {
-      setCurrentTime(getCurrentTime());
-    }, 1000);
-    return () => clearInterval(intervalId);
-  };
-
-  useEffect(() => {
-    if (isPlaying) {
-      return startVideoInterval();
-    }
-  }, [isPlaying]);
 
   return (
     <Box
