@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { authGoogle, vaidateToken } from "../api/google";
+import { authGoogle } from "../api/google";
 import { isAuthAtom, userTokenAtom } from "../store/auth";
 
 export const useGoogleAuth = () => {
@@ -48,9 +48,13 @@ export function useTryLogin() {
         }
 
         const token: GoogleApiOAuth2TokenObject = JSON.parse(storedToken);
-        const isValid = await vaidateToken(token.access_token);
+        // const isValid = await vaidateToken(token.access_token);
 
-        if (isValid) {
+        // @ts-ignore
+        const expiresAt = parseInt(token.expires_at) * 1000;
+        const isExpired = expiresAt > Date.now();
+
+        if (isExpired) {
           setToken(token);
           window.gapi.client.setToken(token);
           window.gapi.client.load("youtube", "v3", () => {

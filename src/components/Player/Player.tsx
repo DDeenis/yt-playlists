@@ -7,9 +7,10 @@ import { useVideo } from "../../hooks/youtube";
 import { durationToSeconds } from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
+import { PlayerMiddleControls } from "./PlayerMiddleControls";
 
 type Props = {
-  videoId?: string;
+  resourceId?: string;
   volume?: number;
 };
 
@@ -19,7 +20,7 @@ try {
   console.error("Failed to register youtube provider");
 }
 
-export const Player = ({ videoId, volume = 50 }: Props) => {
+export const Player = ({ resourceId: videoId, volume = 50 }: Props) => {
   const playerRef = useRef<any>(null);
   const { video, loadVideo } = useVideo();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -61,14 +62,17 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
       onReady: (player: any) => {
         playerRef.current = player.instance;
         player.instance.setVolume(volume);
+        player.instance.setPlaybackQuality("small");
 
         player.instance.addEventListener(
           "onStateChange",
           function (state: { target: any; data: number }) {
             const { data } = state;
 
-            if (data === 0 || data === 2) {
+            if (data === 2) {
               setIsPlaying(false);
+            } else if (data === 0) {
+              setTimeout(() => setIsPlaying(false), 1000);
             } else if (data === 1) {
               setIsPlaying(true);
             }
@@ -121,6 +125,7 @@ export const Player = ({ videoId, volume = 50 }: Props) => {
         onPlay={onPlay}
         onPause={onPause}
       />
+      <PlayerMiddleControls video={video} />
       <Box opacity={0} position={"fixed"} bottom={"-100vh"}>
         <div id="player" className="vlite-js" />
       </Box>

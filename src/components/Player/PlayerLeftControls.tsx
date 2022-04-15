@@ -43,13 +43,13 @@ export const PlayerLeftControls = ({
     >
       <CgPlayTrackPrev className="player-next-prev-btn play-controls-btn" />
       <button onClick={middleHandler}>
-        {!isPlaying ? (
-          <CgPlayButton
+        {isPlaying ? (
+          <CgPlayPause
             viewBox="5 5 14 14"
             className="player-play-btn play-controls-btn"
           />
         ) : (
-          <CgPlayPause
+          <CgPlayButton
             viewBox="5 5 14 14"
             className="player-play-btn play-controls-btn"
           />
