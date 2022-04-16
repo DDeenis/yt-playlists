@@ -15,6 +15,7 @@ export const PlaylistPage = () => {
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
   const [playingVideo, setPlayingVideo] = useState<string>();
+  const [volume, setVolume] = useState(20);
 
   useEffect(() => {
     if (id) {
@@ -24,6 +25,7 @@ export const PlaylistPage = () => {
   }, []);
 
   const onPlay = (id?: string) => setPlayingVideo(id);
+  const onVolumeChange = (val: number) => setVolume(val);
 
   const navigateLibrary = () => navigate("/library");
 
@@ -40,7 +42,11 @@ export const PlaylistPage = () => {
         </Box>
       )}
       <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
-      <Player resourceId={playingVideo} volume={20} />
+      <Player
+        resourceId={playingVideo}
+        volume={volume}
+        onVolumeChange={onVolumeChange}
+      />
     </Box>
   ) : (
     <PageLoader />
