@@ -9,6 +9,7 @@ import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { PlayerMiddleControls } from "./PlayerMiddleControls";
 import { PlayerRightControls } from "./PlayerRightControls";
+import { useRepeatState } from "../../hooks/playlist";
 
 type Props = {
   resourceId?: string;
@@ -29,9 +30,9 @@ export const Player = ({
 }: Props) => {
   const playerRef = useRef<any>(null);
   const { video, loadVideo } = useVideo();
+  const { repeatState, setRepeatState } = useRepeatState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const isVideo = Number(videoId) === 8;
 
   const videoDurationSeconds = useMemo(
     () => durationToSeconds(video?.contentDetails?.duration),
@@ -134,7 +135,12 @@ export const Player = ({
         onPause={onPause}
       />
       <PlayerMiddleControls video={video} />
-      <PlayerRightControls volume={volume} onVolumeChange={onVolumeChange} />
+      <PlayerRightControls
+        volume={volume}
+        repeatState={repeatState}
+        onVolumeChange={onVolumeChange}
+        onRepeat={setRepeatState}
+      />
       <Box opacity={0} position={"fixed"} bottom={"-100vh"}>
         <div id="player" className="vlite-js" />
       </Box>
