@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Vlitejs from "vlitejs";
 import VlitejsYoutube from "vlitejs/dist/providers/youtube";
 import "./styles.css";
@@ -31,9 +31,11 @@ export const Player = ({
   const { video, loadVideo } = useVideo();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const isVideo = Number(videoId) === 8;
 
-  const videoDurationSeconds = durationToSeconds(
-    video?.contentDetails?.duration
+  const videoDurationSeconds = useMemo(
+    () => durationToSeconds(video?.contentDetails?.duration),
+    [video?.contentDetails?.duration]
   );
 
   const getCurrentTime = () => {

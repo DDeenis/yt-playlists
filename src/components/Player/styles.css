@@ -16,3 +16,13 @@
   width: 28px;
   height: 28px;
 }
+
+.player-right-controls {
+  width: 22px;
+  height: 22px;
+}
+
+.player-mix-btn {
+  width: 30px;
+  height: revert;
+}

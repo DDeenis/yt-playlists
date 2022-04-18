@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaVolumeDown, FaVolumeMute } from "react-icons/fa";
-import { CgRepeat } from "react-icons/cg";
+import { RiRepeatLine } from "react-icons/ri";
 import { IoIosShuffle } from "react-icons/io";
 
 type Props = {
@@ -29,7 +29,7 @@ export const PlayerRightControls = ({ volume, onVolumeChange }: Props) => {
       gap={"4"}
       justifyContent={"flex-end"}
       alignItems={"center"}
-      color={"white"}
+      color={"gray.400"}
       onMouseLeave={hideSlider}
     >
       <Fade in={isOpen} unmountOnExit>
@@ -49,16 +49,16 @@ export const PlayerRightControls = ({ volume, onVolumeChange }: Props) => {
       </Fade>
       <button onMouseOver={showSlider}>
         {volume === 0 ? (
-          <FaVolumeMute className="player-next-prev-btn" />
+          <FaVolumeMute className="player-right-controls" />
         ) : (
-          <FaVolumeDown className="player-next-prev-btn" />
+          <FaVolumeDown className="player-right-controls" />
         )}
       </button>
       <button>
-        <CgRepeat className="player-next-prev-btn" />
+        <RiRepeatLine className="player-right-controls" />
       </button>
       <button>
-        <IoIosShuffle className="player-next-prev-btn" />
+        <IoIosShuffle className="player-right-controls player-mix-btn" />
       </button>
     </Box>
   );
