@@ -1,5 +1,5 @@
 import { Box, ButtonGroup, Tooltip } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { convertToRange, formatTime } from "../../helpers/playlists";
 
 type Props = {
@@ -13,7 +13,10 @@ export const PlayerProgressBar = ({
   currentTimeSeconds,
   onSeek,
 }: Props) => {
-  const [tooltips, setTooltips] = useState<JSX.Element[]>();
+  const [selectedSecond, setSelectedSecond] = useState(0);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const tipMunites = Math.floor(selectedSecond / 60);
+  const tipSeconds = selectedSecond % 60;
   const progressWidth = convertToRange(
     currentTimeSeconds,
     0,
@@ -22,49 +25,52 @@ export const PlayerProgressBar = ({
     100
   );
 
-  useEffect(() => {
-    const arr: JSX.Element[] = [];
+  const mouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (boxRef.current) {
+      boxRef.current.style.left = `${e.clientX}px`;
+    }
+  };
+  const mouseLeave = () => {
+    if (boxRef.current) {
+      boxRef.current.style.left = "-100%";
+    }
+  };
+  const mouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const width = document.documentElement.clientWidth;
     const step = width / durationSeconds;
+    const videoSecond = Math.ceil(e.clientX / step);
 
-    for (let i = 0; i < durationSeconds; i++) {
-      const second = i + 1;
-
-      const tipMunites = Math.floor(second / 60);
-      const tipSeconds = second % 60;
-
-      arr.push(
-        <Tooltip
-          hasArrow
-          placement="top"
-          label={formatTime(tipMunites, tipSeconds)}
-          key={second}
-        >
-          <Box
-            height={"5px"}
-            width={`${step}px`}
-            bg={"transparent"}
-            cursor={"pointer"}
-            onClick={() => onSeek(second)}
-          />
-        </Tooltip>
-      );
+    if (selectedSecond !== videoSecond) {
+      setSelectedSecond(videoSecond);
     }
-
-    setTooltips(arr);
-  }, [durationSeconds]);
-
-  // const mouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
-  //   const width = document.documentElement.clientWidth;
-  //   const step = width / durationSeconds;
-  //   const videoSecond = Math.ceil(e.clientX / step);
-  // };
+  };
 
   return (
-    <Box position={"absolute"} w={"100%"}>
-      <Box pos={"absolute"} w={"100%"} zIndex={10} display={"flex"}>
-        {tooltips}
-      </Box>
+    <Box
+      position={"absolute"}
+      w={"100%"}
+      h={"10px"}
+      onMouseOver={mouseOver}
+      onMouseLeave={mouseLeave}
+      onMouseMove={mouseMove}
+    >
+      <Tooltip
+        hasArrow
+        placement="top"
+        label={formatTime(tipMunites, tipSeconds)}
+      >
+        <Box
+          ref={boxRef}
+          height={"10px"}
+          width={`5px`}
+          bg={"transparent"}
+          cursor={"pointer"}
+          pos={"absolute"}
+          left={"-100%"}
+          zIndex={10}
+          onClick={() => onSeek(selectedSecond)}
+        />
+      </Tooltip>
       <Box
         bg={"gray.400"}
         height={"5px"}

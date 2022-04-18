@@ -55,8 +55,6 @@ export const Player = ({
     playerRef.current.pauseVideo();
   };
   const onSeek = (seconds: number) => {
-    console.log(seconds);
-
     playerRef.current.seekTo(seconds, true);
   };
 
@@ -88,6 +86,8 @@ export const Player = ({
       provider: "youtube",
       plugins: [],
     });
+
+    return () => playerRef.current.instance.destroy();
   }, []);
 
   useEffect(() => {
