@@ -4,7 +4,7 @@ import Vlitejs from "vlitejs";
 import VlitejsYoutube from "vlitejs/dist/providers/youtube";
 import "./styles.css";
 import { useVideo } from "../../hooks/youtube";
-import { durationToSeconds } from "../../helpers/playlists";
+import { durationToSeconds, videoIdFromUrl } from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { PlayerMiddleControls } from "./PlayerMiddleControls";
@@ -12,7 +12,9 @@ import { PlayerRightControls } from "./PlayerRightControls";
 import { useRepeatState } from "../../hooks/playlist";
 
 type Props = {
-  resourceId?: string;
+  playlistId?: string;
+  videoIndex?: number;
+  videoId?: string;
   volume?: number;
   onVolumeChange: (volume: number) => void;
 };
@@ -24,7 +26,8 @@ try {
 }
 
 export const Player = ({
-  resourceId: videoId,
+  playlistId,
+  videoIndex,
   onVolumeChange,
   volume = 50,
 }: Props) => {
@@ -76,12 +79,15 @@ export const Player = ({
           function (state: { target: any; data: number }) {
             const { data } = state;
 
-            if (data === 2) {
-              setIsPlaying(false);
-            } else if (data === 0) {
+            if (data === 0) {
               setTimeout(() => setIsPlaying(false), 1000);
             } else if (data === 1) {
               setIsPlaying(true);
+            } else if (data === 2) {
+              setIsPlaying(false);
+            } else if (data === 3) {
+              const videoId = videoIdFromUrl(player.instance.getVideoUrl());
+              videoId && loadVideo(videoId);
             }
           }
         );
@@ -94,12 +100,13 @@ export const Player = ({
   }, []);
 
   useEffect(() => {
-    videoId && loadVideo(videoId);
-
-    if (playerRef.current && videoId) {
-      playerRef.current.loadVideoById(videoId);
+    if (playerRef.current && playlistId) {
+      playerRef.current.loadPlaylist({
+        list: playlistId,
+        index: videoIndex,
+      });
     }
-  }, [videoId]);
+  }, [playlistId, videoIndex]);
 
   useEffect(() => {
     if (playerRef.current && volume !== undefined) {

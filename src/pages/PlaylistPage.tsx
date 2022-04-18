@@ -16,6 +16,9 @@ export const PlaylistPage = () => {
   const navigate = useNavigate();
   const [playingVideo, setPlayingVideo] = useState<string>();
   const [volume, setVolume] = useState(20);
+  const videoIndex = playingVideo
+    ? playlistVideos?.findIndex((v) => v.id === playingVideo)
+    : -1;
 
   useEffect(() => {
     if (id) {
@@ -43,7 +46,9 @@ export const PlaylistPage = () => {
       )}
       <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
       <Player
-        resourceId={playingVideo}
+        playlistId={id}
+        videoIndex={videoIndex}
+        videoId={playingVideo}
         volume={volume}
         onVolumeChange={onVolumeChange}
       />

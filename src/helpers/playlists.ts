@@ -76,6 +76,5 @@ export const convertToRange = (
   return ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 };
 
-const videoIdLength = 11;
-export const isVideo = (id: string) => id.length === videoIdLength;
-export const isPlaylist = (id: string) => id.length > videoIdLength;
+export const videoIdFromUrl = (url: string) =>
+  new URL(url).searchParams.get("v");
