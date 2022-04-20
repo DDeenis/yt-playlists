@@ -4,17 +4,20 @@ import Vlitejs from "vlitejs";
 import VlitejsYoutube from "vlitejs/dist/providers/youtube";
 import "./styles.css";
 import { useVideo } from "../../hooks/youtube";
-import { durationToSeconds, videoIdFromUrl } from "../../helpers/playlists";
+import {
+  durationToSeconds,
+  replayIfAllowed,
+  videoIdFromUrl,
+} from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { PlayerMiddleControls } from "./PlayerMiddleControls";
 import { PlayerRightControls } from "./PlayerRightControls";
-import { useRepeatState } from "../../hooks/playlist";
+import { useRepeatState, YoutubeRepeatState } from "../../hooks/playlist";
 
 type Props = {
   playlistId?: string;
   videoIndex?: number;
-  videoId?: string;
   volume?: number;
   onVolumeChange: (volume: number) => void;
 };
@@ -32,8 +35,10 @@ export const Player = ({
   volume = 50,
 }: Props) => {
   const playerRef = useRef<any>(null);
+  const skipNextReplayRef = useRef(false);
+  const videoIndexRef = useRef<number>(videoIndex ?? 0);
   const { video, loadVideo } = useVideo();
-  const { repeatState, setRepeatState } = useRepeatState();
+  const { repeatState, repeatStateRef, setRepeatState } = useRepeatState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
@@ -79,8 +84,25 @@ export const Player = ({
           function (state: { target: any; data: number }) {
             const { data } = state;
 
-            if (data === 0) {
-              setTimeout(() => setIsPlaying(false), 1000);
+            if (data === -1) {
+              if (repeatStateRef.current === YoutubeRepeatState.video) {
+                replayIfAllowed(skipNextReplayRef, () => {
+                  player.instance.loadPlaylist({
+                    list: playlistId,
+                    index: videoIndexRef.current,
+                    suggestedQuality: "small",
+                  });
+                });
+              }
+            } else if (data === 0) {
+              if (repeatStateRef.current === YoutubeRepeatState.playlist) {
+                replayIfAllowed(skipNextReplayRef, () => {
+                  player.instance.loadPlaylist({
+                    list: playlistId,
+                    suggestedQuality: "small",
+                  });
+                });
+              }
             } else if (data === 1) {
               setIsPlaying(true);
             } else if (data === 2) {
@@ -96,14 +118,16 @@ export const Player = ({
       plugins: [],
     });
 
-    return () => playerRef.current.instance.destroy();
+    return () => playerRef.current.destroy();
   }, []);
 
   useEffect(() => {
+    videoIndexRef.current = videoIndex ?? 0;
     if (playerRef.current && playlistId) {
       playerRef.current.loadPlaylist({
         list: playlistId,
         index: videoIndex,
+        suggestedQuality: "small",
       });
     }
   }, [playlistId, videoIndex]);

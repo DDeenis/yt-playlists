@@ -48,7 +48,6 @@ export const PlaylistPage = () => {
       <Player
         playlistId={id}
         videoIndex={videoIndex}
-        videoId={playingVideo}
         volume={volume}
         onVolumeChange={onVolumeChange}
       />

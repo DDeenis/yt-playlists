@@ -56,7 +56,7 @@ export const PlayerLeftControls = ({
         )}
       </button>
       <CgPlayTrackNext className="player-next-prev-btn play-controls-btn" />
-      <Box w={"80px"} position={"relative"}>
+      <Box w={"140px"} position={"relative"}>
         <Text
           color={"gray.400"}
           fontWeight={"semibold"}

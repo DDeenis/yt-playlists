@@ -5,6 +5,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -27,6 +28,11 @@ export const PlayerRightControls = ({
   onRepeat,
 }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isTooltipOpen,
+    onOpen: openTooltip,
+    onClose: closeTooltip,
+  } = useDisclosure();
 
   const onSliderChange = (val: number) => onVolumeChange(val);
   const onRepeatToggle = () => {
@@ -56,11 +62,22 @@ export const PlayerRightControls = ({
           orientation={"horizontal"}
           w={"100px"}
           onChange={onSliderChange}
+          onMouseEnter={openTooltip}
+          onMouseLeave={closeTooltip}
         >
           <SliderTrack bg={"gray.500"}>
             <SliderFilledTrack bg={"white"} />
           </SliderTrack>
-          <SliderThumb />
+          <Tooltip
+            hasArrow
+            bg="gray.600"
+            color="white"
+            placement="top"
+            isOpen={isTooltipOpen}
+            label={`${volume}%`}
+          >
+            <SliderThumb />
+          </Tooltip>
         </Slider>
       </Fade>
       <button onMouseOver={onOpen}>

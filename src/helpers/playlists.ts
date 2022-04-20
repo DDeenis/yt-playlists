@@ -1,3 +1,5 @@
+import React from "react";
+
 export const linksToIds = (links: string[]): string[] => {
   const ids = links
     .map((l) => new URL(l).searchParams.get("list"))
@@ -78,3 +80,15 @@ export const convertToRange = (
 
 export const videoIdFromUrl = (url: string) =>
   new URL(url).searchParams.get("v");
+
+export const replayIfAllowed = (
+  skipNextReplayRef: React.MutableRefObject<boolean>,
+  cb: () => void
+) => {
+  if (!skipNextReplayRef.current) {
+    cb();
+    skipNextReplayRef.current = true;
+  } else {
+    skipNextReplayRef.current = false;
+  }
+};
