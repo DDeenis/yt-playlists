@@ -11,7 +11,6 @@ import {
 import React from "react";
 import { FaVolumeDown, FaVolumeMute } from "react-icons/fa";
 import { MdRepeat, MdRepeatOne } from "react-icons/md";
-import { IoIosShuffle } from "react-icons/io";
 import { YoutubeRepeatState } from "../../hooks/playlist";
 
 type Props = {
@@ -95,9 +94,6 @@ export const PlayerRightControls = ({
         ) : (
           <MdRepeatOne className="player-right-controls color-white" />
         )}
-      </button>
-      <button>
-        <IoIosShuffle className="player-right-controls player-mix-btn" />
       </button>
     </Box>
   );
