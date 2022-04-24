@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { YTButton } from "../components/Common/YTButton";
 import { PageLoader } from "../components/Common/PageLoader";
@@ -8,27 +8,31 @@ import { PlaylistInfoBlock } from "../components/Playlists/PlaylistInfoBlock";
 import { PlaylistItemsList } from "../components/Playlists/tracks/PlaylistItemsList";
 import { usePlaylist, usePlaylistVideos } from "../hooks/youtube";
 import { FaArrowLeft } from "react-icons/fa";
+import { usePlayerConfig } from "../hooks/playlist";
 
 export const PlaylistPage = () => {
   const { id } = useParams();
   const { playlistVideos, loadVideos } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
-  const [playingVideo, setPlayingVideo] = useState<string>();
-  const [volume, setVolume] = useState(20);
-  const videoIndex = playingVideo
-    ? playlistVideos?.findIndex((v) => v.id === playingVideo)
-    : -1;
+  const { config, setVolume, setPlayInfo, setOnVolumeChange } =
+    usePlayerConfig();
 
   useEffect(() => {
+    setOnVolumeChange((val: number) => setVolume(val));
     if (id) {
       loadVideos(id);
       loadPlaylist(id);
     }
   }, []);
 
-  const onPlay = (id?: string) => setPlayingVideo(id);
-  const onVolumeChange = (val: number) => setVolume(val);
+  const onPlay = (id?: string) => {
+    const videoIndex = id ? playlistVideos?.findIndex((v) => v.id === id) : -1;
+
+    if (playlist?.id) {
+      setPlayInfo(playlist?.id, videoIndex);
+    }
+  };
 
   const navigateLibrary = () => navigate("/library");
 
@@ -45,12 +49,7 @@ export const PlaylistPage = () => {
         </Box>
       )}
       <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
-      <Player
-        playlistId={id}
-        videoIndex={videoIndex}
-        volume={volume}
-        onVolumeChange={onVolumeChange}
-      />
+      <Player {...config} />
     </Box>
   ) : (
     <PageLoader />

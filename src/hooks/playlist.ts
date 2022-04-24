@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import { playerConfigAtom } from "../store/playerConfig";
 
 export enum YoutubeRepeatState {
   none,
@@ -16,4 +18,35 @@ export const useRepeatState = () => {
   };
 
   return { repeatState, repeatStateRef, setRepeatState };
+};
+
+export const usePlayerConfig = () => {
+  const [playerConfig, setPlayerConfig] = useRecoilState(playerConfigAtom);
+
+  const setPlayInfo = (playlistId: string, videoIndex = 0) => {
+    setPlayerConfig((playerConfig) => ({
+      ...playerConfig,
+      playlistId,
+      videoIndex,
+    }));
+  };
+
+  const setVolume = (volume: number) => {
+    setPlayerConfig((playerConfig) => ({ ...playerConfig, volume }));
+  };
+
+  const setOnVolumeChange = (cb: (val: number) => void) => [
+    setPlayerConfig((playerConfig) => ({
+      ...playerConfig,
+      onVolumeChange: cb,
+    })),
+  ];
+
+  return {
+    config: playerConfig,
+    setConfig: setPlayerConfig,
+    setPlayInfo,
+    setVolume,
+    setOnVolumeChange,
+  };
 };
