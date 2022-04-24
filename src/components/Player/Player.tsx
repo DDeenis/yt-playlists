@@ -40,6 +40,7 @@ export const Player = ({
   const { video, loadVideo } = useVideo();
   const { repeatState, repeatStateRef, setRepeatState } = useRepeatState();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
   const videoDurationSeconds = useMemo(
@@ -102,9 +103,12 @@ export const Player = ({
                     suggestedQuality: "small",
                   });
                 });
+              } else {
+                setVisible(false);
               }
             } else if (data === 1) {
               setIsPlaying(true);
+              setVisible(true);
             } else if (data === 2) {
               setIsPlaying(false);
             } else if (data === 3) {
@@ -152,6 +156,7 @@ export const Player = ({
       py={"4"}
       px={"8"}
       className={"player-layout"}
+      style={{ display: visible ? "grid" : "none" }}
     >
       <PlayerProgressBar
         durationSeconds={videoDurationSeconds}
