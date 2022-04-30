@@ -15,6 +15,8 @@ type Props = {
   isPlaying: boolean;
   onPlay: () => void;
   onPause: () => void;
+  onPlayPrev: () => void;
+  onPlayNext: () => void;
 };
 
 export const PlayerLeftControls = ({
@@ -23,6 +25,8 @@ export const PlayerLeftControls = ({
   isPlaying,
   onPlay,
   onPause,
+  onPlayPrev,
+  onPlayNext,
 }: Props) => {
   const durationMinutes = Math.floor(durationSeconds / 60);
   const durationSecondsLeft = durationSeconds % 60;
@@ -41,7 +45,9 @@ export const PlayerLeftControls = ({
       alignItems={"center"}
       color={"white"}
     >
-      <CgPlayTrackPrev className="player-next-prev-btn play-controls-btn" />
+      <button onClick={onPlayPrev}>
+        <CgPlayTrackPrev className="player-next-prev-btn play-controls-btn" />
+      </button>
       <button onClick={middleHandler}>
         {isPlaying ? (
           <CgPlayPause
@@ -55,7 +61,9 @@ export const PlayerLeftControls = ({
           />
         )}
       </button>
-      <CgPlayTrackNext className="player-next-prev-btn play-controls-btn" />
+      <button onClick={onPlayNext}>
+        <CgPlayTrackNext className="player-next-prev-btn play-controls-btn" />
+      </button>
       <Box w={"140px"} position={"relative"}>
         <Text
           color={"gray.400"}

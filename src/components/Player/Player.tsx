@@ -73,13 +73,17 @@ export const Player = ({
   const onPause = () => {
     playerRef.current.pauseVideo();
   };
+  const onPlayPrev = () => {
+    playerRef.current.previousVideo();
+  };
+  const onPlayNext = () => {
+    playerRef.current.nextVideo();
+  };
   const onSeek = (seconds: number) => {
     playerRef.current.seekTo(seconds, true);
   };
 
   useEffect(() => {
-    console.log("mount");
-
     new Vlitejs("#player", {
       options: {
         autoplay: false,
@@ -178,6 +182,8 @@ export const Player = ({
         isPlaying={isPlaying}
         onPlay={onPlay}
         onPause={onPause}
+        onPlayPrev={onPlayPrev}
+        onPlayNext={onPlayNext}
       />
       <PlayerMiddleControls video={video} />
       <PlayerRightControls
