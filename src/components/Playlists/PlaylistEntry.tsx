@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 type Props = {
   playlist: gapi.client.youtube.Playlist;
   onRemove: (id: string) => void;
+  onPlay: (id: string) => void;
 };
 
-export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
+export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
   const playlistLink = `/playlist/${playlist.id}`;
   const channelLink = `https://www.youtube.com/channel/${playlist.snippet?.channelId}`;
 
@@ -16,11 +17,19 @@ export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
   const fallbackImg = playlist.snippet?.thumbnails?.high?.url;
   const imgUrl = preferredImg ? preferredImg : fallbackImg;
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (playlist.id) {
       onRemove(playlist.id);
+    }
+  };
+
+  const handlePlay = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (playlist.id) {
+      onPlay(playlist.id);
     }
   };
 
@@ -59,7 +68,7 @@ export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
             zIndex={10}
             _hover={{ bg: "blackAlpha.300" }}
             _active={{ bg: "blackAlpha.300" }}
-            onClick={handleClick}
+            onClick={handleRemove}
           />
           <IconButton
             aria-label={"Play playlist"}
@@ -74,6 +83,7 @@ export const PlaylistEntry = ({ playlist, onRemove }: Props) => {
             zIndex={10}
             _hover={{ bg: "blackAlpha.700" }}
             _active={{ bg: "blackAlpha.700" }}
+            onClick={handlePlay}
           />
         </Box>
       </Link>

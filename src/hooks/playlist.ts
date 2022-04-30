@@ -42,11 +42,16 @@ export const usePlayerConfig = () => {
     })),
   ];
 
+  const setVisible = (visible: boolean) => {
+    setPlayerConfig((playerConfig) => ({ ...playerConfig, visible }));
+  };
+
   return {
     config: playerConfig,
     setConfig: setPlayerConfig,
     setPlayInfo,
     setVolume,
     setOnVolumeChange,
+    setVisible,
   };
 };
