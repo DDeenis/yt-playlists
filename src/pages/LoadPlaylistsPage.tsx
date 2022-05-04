@@ -25,9 +25,9 @@ export const LoadPlaylistsPage = () => {
 
   return (
     <>
-      <AuthNotice />
+      <AuthNotice auth={authGoole} isAuth={isAuth} />
       <Center h="100vh">
-        <LoadPlaylists onConfirm={onClick} />
+        <LoadPlaylists onConfirm={onClick} isAuth={isAuth} />
       </Center>
     </>
   );

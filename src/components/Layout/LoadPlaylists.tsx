@@ -1,13 +1,15 @@
 import { Box, Button, Center, Text, Textarea } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { YTButton } from "../Common/YTButton";
 
 type Props = {
   onConfirm: (urls: string[]) => void;
+  isAuth: boolean;
   error?: string;
 };
 
-export const LoadPlaylists = ({ onConfirm, error }: Props) => {
+export const LoadPlaylists = ({ onConfirm, isAuth, error }: Props) => {
   const [playlistsStr, setPlaylistsStr] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -39,6 +41,13 @@ export const LoadPlaylists = ({ onConfirm, error }: Props) => {
         isInvalid={Boolean(error)}
       />
       <YTButton onClick={confirmLoad}>Confirm</YTButton>
+      {isAuth && (
+        <YTButton>
+          <Link to={"/library"} style={{ display: "block" }}>
+            To Library
+          </Link>
+        </YTButton>
+      )}
     </Box>
   );
 };

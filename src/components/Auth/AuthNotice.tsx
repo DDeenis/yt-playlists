@@ -1,15 +1,14 @@
 import { Box, Button, Text } from "@chakra-ui/react";
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { useGoogleAuth } from "../../hooks/auth";
-import { isAuthAtom } from "../../store/auth";
 import { FaUserLock, FaLockOpen } from "react-icons/fa";
 import "./styles.css";
 
-export const AuthNotice = () => {
-  const auth = useGoogleAuth();
-  const isAuth = useRecoilValue(isAuthAtom);
+interface Props {
+  auth: () => Promise<unknown>;
+  isAuth: boolean;
+}
 
+export const AuthNotice = ({ auth, isAuth }: Props) => {
   return (
     <Box
       bg="gray.900"
@@ -40,17 +39,19 @@ export const AuthNotice = () => {
           Auth with Google
         </Button>
       ) : (
-        <Text
-          color={"white"}
-          fontWeight="semibold"
-          display={"flex"}
-          justifyContent="center"
-          alignItems={"center"}
-          gap={"3"}
-        >
-          <FaLockOpen className="fill-green" />
-          Authentificated with Google
-        </Text>
+        <>
+          <Text
+            color={"white"}
+            fontWeight="semibold"
+            display={"flex"}
+            justifyContent="center"
+            alignItems={"center"}
+            gap={"3"}
+          >
+            <FaLockOpen className="fill-green" />
+            Authentificated with Google
+          </Text>
+        </>
       )}
     </Box>
   );
