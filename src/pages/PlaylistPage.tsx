@@ -19,7 +19,6 @@ export const PlaylistPage = () => {
     usePlayerConfig();
 
   useEffect(() => {
-    setOnVolumeChange((val: number) => setVolume(val));
     if (id) {
       loadVideos(id);
       loadPlaylist(id);

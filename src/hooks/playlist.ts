@@ -28,6 +28,7 @@ export const usePlayerConfig = () => {
       ...playerConfig,
       playlistId,
       videoIndex,
+      onVolumeChange: (val: number) => setVolume(val),
     }));
   };
 
