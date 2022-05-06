@@ -2,9 +2,10 @@ import { Box, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { FaPlay } from "react-icons/fa";
 import { formatVideoDuration } from "../../../helpers/playlists";
+import { YoutubeVideo } from "../../../hooks/youtube";
 
 type Props = {
-  video: gapi.client.youtube.Video;
+  video: YoutubeVideo;
   onPlay: () => void;
 };
 
@@ -60,7 +61,7 @@ export const PlaylistListItem = ({ video, onPlay }: Props) => {
         </a>
       </Text>
       <Text color={"gray.400"} fontWeight={"semibold"} ml={"auto"}>
-        {formatVideoDuration(video.contentDetails?.duration)}
+        {formatVideoDuration(video.duration)}
       </Text>
     </Box>
   );

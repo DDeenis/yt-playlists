@@ -1,9 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
+import { YoutubeVideo } from "../../../hooks/youtube";
 import { PlaylistListItem } from "./PlaylistListItem";
 
 type Props = {
-  videos: gapi.client.youtube.Video[];
+  videos: YoutubeVideo[];
   onPlay: (id?: string) => void;
 };
 

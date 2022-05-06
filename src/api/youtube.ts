@@ -38,3 +38,15 @@ export const getPlaylistVideos = (ids: string[]) => {
     maxResults: 50,
   });
 };
+
+export const getVideosWithDuration = (
+  playlistItems: gapi.client.youtube.PlaylistItem[]
+) => {
+  const ids = playlistItems
+    ?.map((i) =>
+      i.snippet?.resourceId?.videoId ? i.snippet?.resourceId?.videoId : ""
+    )
+    .filter((i) => i !== "");
+
+  return getPlaylistVideos(ids);
+};

@@ -92,3 +92,13 @@ export const replayIfAllowed = (
     skipNextReplayRef.current = false;
   }
 };
+
+export const mergeItemsAndVideos = (
+  playlistItems: gapi.client.youtube.PlaylistItem[],
+  videos: gapi.client.youtube.Video[]
+) => {
+  return videos.map((v, i) => ({
+    ...playlistItems[i],
+    duration: v.contentDetails?.duration,
+  }));
+};

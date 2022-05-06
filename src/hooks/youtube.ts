@@ -4,9 +4,15 @@ import {
   getPlaylistsById,
   getPlaylistItems,
   getPlaylistVideos,
+  getVideosWithDuration,
 } from "../api/youtube";
+import { mergeItemsAndVideos } from "../helpers/playlists";
 import { playlistsIdsBuffer } from "../store/playlists";
 import { useLocalPlaylistsIds } from "./storage";
+
+export type YoutubeVideo = gapi.client.youtube.PlaylistItem & {
+  duration?: string;
+};
 
 export const usePlaylists = () => {
   const [playlists, setPlaylists] = useState<gapi.client.youtube.Playlist[]>();
@@ -76,22 +82,33 @@ export const usePlaylistItems = () => {
 };
 
 export const usePlaylistVideos = () => {
-  const [playlistVideos, setPlaylistsVideos] =
-    useState<gapi.client.youtube.Video[]>();
+  const [playlistVideos, setPlaylistsVideos] = useState<YoutubeVideo[]>();
+  const [nextPageToken, setNextPageToken] = useState<string>();
 
   const loadVideos = (playlistId: string) => {
     return getPlaylistItems(playlistId).then((res) => {
-      const ids = res.result.items
-        ?.map((i) =>
-          i.snippet?.resourceId?.videoId ? i.snippet?.resourceId?.videoId : ""
-        )
-        .filter((i) => i !== "");
-      if (ids) {
-        getPlaylistVideos(ids).then((res) =>
-          setPlaylistsVideos(res.result.items)
-        );
+      const playlistItems = res.result.items;
+
+      if (res.result.nextPageToken) {
+        setNextPageToken(res.result.nextPageToken);
       }
+
+      if (!playlistItems) return;
+
+      getVideosWithDuration(playlistItems).then((res) => {
+        if (!res.result.items) return;
+
+        setPlaylistsVideos(
+          mergeItemsAndVideos(playlistItems, res.result.items)
+        );
+      });
     });
+  };
+
+  const loadNextVideos = () => {
+    if (!nextPageToken) {
+      return;
+    }
   };
 
   return { playlistVideos, loadVideos };

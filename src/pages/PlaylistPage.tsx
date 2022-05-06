@@ -15,8 +15,7 @@ export const PlaylistPage = () => {
   const { playlistVideos, loadVideos } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
-  const { config, setVolume, setPlayInfo, setOnVolumeChange } =
-    usePlayerConfig();
+  const { config, setPlayInfo } = usePlayerConfig();
 
   useEffect(() => {
     if (id) {
