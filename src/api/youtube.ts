@@ -23,11 +23,12 @@ export const getPlaylistsById = async (ids: string[]) => {
   });
 };
 
-export const getPlaylistItems = (playlistId: string) => {
+export const getPlaylistItems = (playlistId: string, pageToken?: string) => {
   return window.gapi.client.youtube.playlistItems.list({
     part: ["id", "snippet", "contentDetails"].join(","),
     playlistId,
     maxResults: 50,
+    pageToken,
   });
 };
 

@@ -86,12 +86,9 @@ export const usePlaylistVideos = () => {
   const [nextPageToken, setNextPageToken] = useState<string>();
 
   const loadVideos = (playlistId: string) => {
-    return getPlaylistItems(playlistId).then((res) => {
+    return getPlaylistItems(playlistId, nextPageToken).then((res) => {
       const playlistItems = res.result.items;
-
-      if (res.result.nextPageToken) {
-        setNextPageToken(res.result.nextPageToken);
-      }
+      setNextPageToken(res.result.nextPageToken);
 
       if (!playlistItems) return;
 
@@ -103,12 +100,6 @@ export const usePlaylistVideos = () => {
         );
       });
     });
-  };
-
-  const loadNextVideos = () => {
-    if (!nextPageToken) {
-      return;
-    }
   };
 
   return { playlistVideos, loadVideos };
