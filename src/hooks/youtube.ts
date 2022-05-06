@@ -83,23 +83,33 @@ export const usePlaylistItems = () => {
 
 export const usePlaylistVideos = () => {
   const [playlistVideos, setPlaylistsVideos] = useState<YoutubeVideo[]>();
-  const [nextPageToken, setNextPageToken] = useState<string>();
+  const nextPageTokenRef = useRef<string | undefined>();
 
   const loadVideos = (playlistId: string) => {
-    return getPlaylistItems(playlistId, nextPageToken).then((res) => {
-      const playlistItems = res.result.items;
-      setNextPageToken(res.result.nextPageToken);
+    return getPlaylistItems(playlistId, nextPageTokenRef.current).then(
+      (res) => {
+        const playlistItems = res.result.items;
+        console.log(nextPageTokenRef.current, res.result.nextPageToken);
+        nextPageTokenRef.current = res.result.nextPageToken;
 
-      if (!playlistItems) return;
+        if (!playlistItems) return;
 
-      getVideosWithDuration(playlistItems).then((res) => {
-        if (!res.result.items) return;
+        getVideosWithDuration(playlistItems).then((res) => {
+          if (!res.result.items) return;
 
-        setPlaylistsVideos(
-          mergeItemsAndVideos(playlistItems, res.result.items)
-        );
-      });
-    });
+          if (nextPageTokenRef.current && playlistVideos) {
+            setPlaylistsVideos([
+              ...playlistVideos,
+              ...mergeItemsAndVideos(playlistItems, res.result.items),
+            ]);
+          } else {
+            setPlaylistsVideos(
+              mergeItemsAndVideos(playlistItems, res.result.items)
+            );
+          }
+        });
+      }
+    );
   };
 
   return { playlistVideos, loadVideos };
