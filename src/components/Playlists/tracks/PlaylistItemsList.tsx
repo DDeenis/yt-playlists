@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { YoutubeVideo } from "../../../hooks/youtube";
+import { ItemsLoader } from "../../Common/ItemsLoader";
 import { PlaylistListItem } from "./PlaylistListItem";
 
 type Props = {
@@ -24,7 +25,7 @@ export const PlaylistItemsList = ({
       <InfiniteScroll
         dataLength={videos.length}
         next={loadVideos}
-        loader={<div>Loading...</div>}
+        loader={<ItemsLoader />}
         hasMore={hasMore}
       >
         {videos.map((v) => (
