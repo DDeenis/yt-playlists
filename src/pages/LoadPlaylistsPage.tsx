@@ -11,11 +11,12 @@ import { isAuthAtom } from "../store/auth";
 export const LoadPlaylistsPage = () => {
   const navigate = useNavigate();
   const authGoole = useGoogleAuth();
-  const { savePlaylistsLinks } = useLocalPlaylistsIds();
+  const { savePlaylistsLinks, playlistsIds } = useLocalPlaylistsIds();
   const isAuth = useRecoilValue(isAuthAtom);
 
   const setBufferIds = (urls: string[]) => {
-    savePlaylistsLinks(urls);
+    const append = playlistsIds.length !== 0;
+    savePlaylistsLinks(urls, append);
     navigate("/library");
   };
 
