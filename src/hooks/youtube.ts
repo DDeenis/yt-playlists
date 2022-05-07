@@ -83,42 +83,38 @@ export const usePlaylistItems = () => {
 
 export const usePlaylistVideos = () => {
   const [playlistVideos, setPlaylistsVideos] = useState<YoutubeVideo[]>();
-  const nextPageTokenRef = useRef<string | undefined>();
+  const [nextPageToken, setNextPageToken] = useState<string>();
+  const hasMore = nextPageToken !== undefined;
   const maxItems = 50;
 
   const loadVideos = (playlistId: string) => {
-    return getPlaylistItems(playlistId, nextPageTokenRef.current).then(
-      (res) => {
-        const playlistItems = res.result.items;
-        console.log(nextPageTokenRef.current, res.result.nextPageToken);
-        nextPageTokenRef.current = res.result.nextPageToken;
+    return getPlaylistItems(playlistId, nextPageToken).then((res) => {
+      const playlistItems = res.result.items;
+      setNextPageToken(res.result.nextPageToken);
 
-        if (!playlistItems) return;
+      if (!playlistItems) return;
 
-        getVideosWithDuration(playlistItems).then((res) => {
-          if (!res.result.items) return;
+      getVideosWithDuration(playlistItems).then((res) => {
+        if (!res.result.items) return;
 
-          if (
-            (nextPageTokenRef.current && playlistVideos) ||
-            (playlistVideos && playlistVideos.length >= maxItems)
-          ) {
-            setPlaylistsVideos([
-              ...playlistVideos,
-              ...mergeItemsAndVideos(playlistItems, res.result.items),
-            ]);
-          } else {
-            setPlaylistsVideos(
-              mergeItemsAndVideos(playlistItems, res.result.items)
-            );
-          }
-        });
-      }
-    );
+        if (
+          (nextPageToken && playlistVideos) ||
+          (playlistVideos && playlistVideos.length >= maxItems)
+        ) {
+          setPlaylistsVideos([
+            ...playlistVideos,
+            ...mergeItemsAndVideos(playlistItems, res.result.items),
+          ]);
+        } else {
+          setPlaylistsVideos(
+            mergeItemsAndVideos(playlistItems, res.result.items)
+          );
+        }
+      });
+    });
   };
 
-  const getHasMore = () => nextPageTokenRef.current !== undefined;
-
-  return { playlistVideos, loadVideos, getHasMore };
+  return { playlistVideos, loadVideos, hasMore };
 };
 
 export const useVideo = () => {

@@ -12,7 +12,7 @@ import { usePlayerConfig } from "../hooks/playlist";
 
 export const PlaylistPage = () => {
   const { id } = useParams();
-  const { playlistVideos, loadVideos, getHasMore } = usePlaylistVideos();
+  const { playlistVideos, loadVideos, hasMore } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
   const { config, setPlayInfo } = usePlayerConfig();
@@ -54,7 +54,7 @@ export const PlaylistPage = () => {
         videos={playlistVideos}
         onPlay={onPlay}
         loadVideos={onLoadNext}
-        hasMore={getHasMore()}
+        hasMore={hasMore}
       />
       <Player {...config} />
     </Box>
