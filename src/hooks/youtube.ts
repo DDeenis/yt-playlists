@@ -84,6 +84,7 @@ export const usePlaylistItems = () => {
 export const usePlaylistVideos = () => {
   const [playlistVideos, setPlaylistsVideos] = useState<YoutubeVideo[]>();
   const nextPageTokenRef = useRef<string | undefined>();
+  const maxItems = 50;
 
   const loadVideos = (playlistId: string) => {
     return getPlaylistItems(playlistId, nextPageTokenRef.current).then(
@@ -97,7 +98,10 @@ export const usePlaylistVideos = () => {
         getVideosWithDuration(playlistItems).then((res) => {
           if (!res.result.items) return;
 
-          if (nextPageTokenRef.current && playlistVideos) {
+          if (
+            (nextPageTokenRef.current && playlistVideos) ||
+            (playlistVideos && playlistVideos.length >= maxItems)
+          ) {
             setPlaylistsVideos([
               ...playlistVideos,
               ...mergeItemsAndVideos(playlistItems, res.result.items),
@@ -112,7 +116,9 @@ export const usePlaylistVideos = () => {
     );
   };
 
-  return { playlistVideos, loadVideos };
+  const getHasMore = () => nextPageTokenRef.current !== undefined;
+
+  return { playlistVideos, loadVideos, getHasMore };
 };
 
 export const useVideo = () => {

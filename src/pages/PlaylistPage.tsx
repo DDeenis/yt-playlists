@@ -12,7 +12,7 @@ import { usePlayerConfig } from "../hooks/playlist";
 
 export const PlaylistPage = () => {
   const { id } = useParams();
-  const { playlistVideos, loadVideos } = usePlaylistVideos();
+  const { playlistVideos, loadVideos, getHasMore } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
   const { config, setPlayInfo } = usePlayerConfig();
@@ -32,6 +32,10 @@ export const PlaylistPage = () => {
     }
   };
 
+  const onLoadNext = () => {
+    if (id) loadVideos(id);
+  };
+
   const navigateLibrary = () => navigate("/library");
 
   return playlistVideos !== undefined ? (
@@ -46,7 +50,12 @@ export const PlaylistPage = () => {
           <PlaylistInfoBlock playlist={playlist} />
         </Box>
       )}
-      <PlaylistItemsList videos={playlistVideos} onPlay={onPlay} />
+      <PlaylistItemsList
+        videos={playlistVideos}
+        onPlay={onPlay}
+        loadVideos={onLoadNext}
+        hasMore={getHasMore()}
+      />
       <Player {...config} />
     </Box>
   ) : (
