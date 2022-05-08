@@ -38,9 +38,9 @@ export const Player = ({
   onVolumeChange,
   volume = 50,
 }: Props) => {
-  const playerRef = useRef<any>(null);
   const skipNextReplayRef = useRef(false);
   const videoIndexRef = useRef<number>(videoIndex ?? 0);
+  const [playerInstance, setPlayerInstance] = useState<any>();
   const { video, loadVideo } = useVideo();
   const { repeatState, repeatStateRef, setRepeatState } = useRepeatState();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -56,7 +56,7 @@ export const Player = ({
   );
 
   const getCurrentTime = () => {
-    const time = playerRef.current?.getCurrentTime();
+    const time = playerInstance?.getCurrentTime();
     return time !== undefined ? Math.ceil(time) : 0;
   };
   const startVideoInterval = () => {
@@ -68,19 +68,20 @@ export const Player = ({
   };
 
   const onPlay = () => {
-    playerRef.current.playVideo();
+    playerInstance.playVideo();
   };
   const onPause = () => {
-    playerRef.current.pauseVideo();
+    playerInstance.pauseVideo();
   };
   const onPlayPrev = () => {
-    playerRef.current.previousVideo();
+    playerInstance.previousVideo();
   };
   const onPlayNext = () => {
-    playerRef.current.nextVideo();
+    playerInstance.nextVideo();
   };
   const onSeek = (seconds: number) => {
-    playerRef.current.seekTo(seconds, true);
+    playerInstance.seekTo(seconds, true);
+    setCurrentTime(seconds);
   };
 
   useEffect(() => {
@@ -89,7 +90,7 @@ export const Player = ({
         autoplay: false,
       },
       onReady: (player: any) => {
-        playerRef.current = player.instance;
+        setPlayerInstance(player.instance);
         player.instance.setVolume(volume);
         player.instance.setPlaybackQuality("small");
 
@@ -135,25 +136,25 @@ export const Player = ({
       plugins: [],
     });
 
-    return () => playerRef.current.destroy();
+    return () => playerInstance.destroy();
   }, []);
 
   useEffect(() => {
     videoIndexRef.current = videoIndex ?? 0;
-    if (playerRef.current && playlistId) {
-      playerRef.current.loadPlaylist({
+    if (playerInstance && playlistId) {
+      playerInstance.loadPlaylist({
         list: playlistId,
         index: videoIndex,
         suggestedQuality: "small",
       });
     }
-  }, [playlistId, videoIndex]);
+  }, [playlistId, videoIndex, playerInstance]);
 
   useEffect(() => {
-    if (playerRef.current && volume !== undefined) {
-      playerRef.current.setVolume(volume);
+    if (playerInstance && volume !== undefined) {
+      playerInstance.setVolume(volume);
     }
-  }, [volume]);
+  }, [volume, playerInstance]);
 
   useEffect(() => {
     if (isPlaying) {
