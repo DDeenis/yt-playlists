@@ -13,17 +13,15 @@ import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { PlayerMiddleControls } from "./PlayerMiddleControls";
 import { PlayerRightControls } from "./PlayerRightControls";
-import {
-  usePlayerConfig,
-  useRepeatState,
-  YoutubeRepeatState,
-} from "../../hooks/playlist";
+import { useRepeatState, YoutubeRepeatState } from "../../hooks/playlist";
 
 type Props = {
   playlistId?: string;
   videoIndex?: number;
   volume?: number;
+  visible?: boolean;
   onVolumeChange: (volume: number) => void;
+  setVisible: (val: boolean) => void;
 };
 
 try {
@@ -35,8 +33,10 @@ try {
 export const Player = ({
   playlistId,
   videoIndex,
-  onVolumeChange,
   volume = 50,
+  onVolumeChange,
+  visible,
+  setVisible,
 }: Props) => {
   const skipNextReplayRef = useRef(false);
   const videoIndexRef = useRef<number>(videoIndex ?? 0);
@@ -45,10 +45,6 @@ export const Player = ({
   const { repeatState, repeatStateRef, setRepeatState } = useRepeatState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const {
-    config: { visible },
-    setVisible,
-  } = usePlayerConfig();
 
   const videoDurationSeconds = useMemo(
     () => durationToSeconds(video?.contentDetails?.duration),
