@@ -15,7 +15,7 @@ export const PlaylistPage = () => {
   const { playlistVideos, loadVideos, hasMore } = usePlaylistVideos();
   const { playlist, loadPlaylist } = usePlaylist();
   const navigate = useNavigate();
-  const { config, setPlayInfo } = usePlayerConfig();
+  const { config, setPlayInfo, setVisible } = usePlayerConfig();
 
   useEffect(() => {
     if (id) {
@@ -56,7 +56,7 @@ export const PlaylistPage = () => {
         loadVideos={onLoadNext}
         hasMore={hasMore}
       />
-      <Player {...config} />
+      <Player {...config} setVisible={setVisible} />
     </Box>
   ) : (
     <PageLoader />
