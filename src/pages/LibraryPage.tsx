@@ -8,7 +8,7 @@ import { useSavedPlaylists } from "../hooks/youtube";
 
 export const LibraryPage = () => {
   const { playlists, removePlaylist } = useSavedPlaylists();
-  const { config, setPlayInfo, setVisible } = usePlayerConfig();
+  const { setPlayInfo } = usePlayerConfig();
 
   const playPlaylist = (id: string) => {
     setPlayInfo(id, 0);
@@ -28,7 +28,6 @@ export const LibraryPage = () => {
           playPlaylist={playPlaylist}
         />
       )}
-      <Player {...config} setVisible={setVisible} />
     </Box>
   );
 };

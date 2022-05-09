@@ -2,7 +2,9 @@ import { Box } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./components/Common/PrivateRoute";
+import { Player } from "./components/Player/Player";
 import { useTryLogin } from "./hooks/auth";
+import { usePlayerConfig } from "./hooks/playlist";
 import { LibraryPage } from "./pages/LibraryPage";
 import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
 import { LoginPage } from "./pages/LoginPage";
@@ -10,6 +12,7 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 
 function App() {
   const tryLogin = useTryLogin();
+  const { config, setVisible } = usePlayerConfig();
 
   useEffect(() => {
     tryLogin().catch(() => console.log("Authomatic auth was not successfull"));
@@ -37,6 +40,7 @@ function App() {
           }
         />
       </Routes>
+      <Player {...config} setVisible={setVisible} />
     </Box>
   );
 }
