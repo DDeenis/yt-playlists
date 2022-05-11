@@ -12,7 +12,9 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 
 function App() {
   const tryLogin = useTryLogin();
-  const { config, setVisible } = usePlayerConfig();
+  const { config, setConfigValue } = usePlayerConfig();
+
+  const setVisible = (val: boolean) => setConfigValue("visible", val);
 
   useEffect(() => {
     tryLogin().catch(() => console.log("Authomatic auth was not successfull"));

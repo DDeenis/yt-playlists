@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { linksToIds } from "../helpers/playlists";
 import { playlistsIdsBuffer } from "../store/playlists";
@@ -37,5 +37,42 @@ export const useLocalPlaylistsIds = () => {
     reloadPlaylists,
     savePlaylistsLinks,
     savePlaylistsIds,
+  };
+};
+
+interface AppConfig {
+  volume?: number;
+  filter?: {
+    orderBy: "ascending" | "descending";
+  };
+}
+
+export const useAppConfig = () => {
+  const [appConfig, setAppConfig] = useState<AppConfig>();
+
+  useEffect(() => {
+    loadConfig();
+  }, []);
+
+  const loadConfig = () => {
+    const savedConfig = localStorage.getItem("config");
+    if (!savedConfig) return;
+    setAppConfig(JSON.parse(savedConfig));
+  };
+
+  const setConfigValue = (
+    name: keyof AppConfig,
+    value: AppConfig[typeof name]
+  ) => {
+    setAppConfig((config) => ({
+      ...config,
+      [name]: value,
+    }));
+  };
+
+  return {
+    appConfig,
+    loadConfig,
+    setConfigValue,
   };
 };

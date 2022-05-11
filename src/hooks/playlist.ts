@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { playerConfigAtom } from "../store/playerConfig";
+import { PlayerConfig, playerConfigAtom } from "../store/playerConfig";
 
 export enum YoutubeRepeatState {
   none,
@@ -23,36 +23,34 @@ export const useRepeatState = () => {
 export const usePlayerConfig = () => {
   const [playerConfig, setPlayerConfig] = useRecoilState(playerConfigAtom);
 
+  const setConfigValue = (
+    name: keyof PlayerConfig,
+    value: PlayerConfig[typeof name]
+  ) => {
+    setPlayerConfig((config) => ({
+      ...config,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    setConfigValue("onVolumeChange", (val: number) =>
+      setConfigValue("volume", val)
+    );
+  }, []);
+
   const setPlayInfo = (playlistId: string, videoIndex = 0) => {
     setPlayerConfig((playerConfig) => ({
       ...playerConfig,
       playlistId,
       videoIndex,
-      onVolumeChange: (val: number) => setVolume(val),
     }));
-  };
-
-  const setVolume = (volume: number) => {
-    setPlayerConfig((playerConfig) => ({ ...playerConfig, volume }));
-  };
-
-  const setOnVolumeChange = (cb: (val: number) => void) => [
-    setPlayerConfig((playerConfig) => ({
-      ...playerConfig,
-      onVolumeChange: cb,
-    })),
-  ];
-
-  const setVisible = (visible: boolean) => {
-    setPlayerConfig((playerConfig) => ({ ...playerConfig, visible }));
   };
 
   return {
     config: playerConfig,
     setConfig: setPlayerConfig,
     setPlayInfo,
-    setVolume,
-    setOnVolumeChange,
-    setVisible,
+    setConfigValue,
   };
 };
