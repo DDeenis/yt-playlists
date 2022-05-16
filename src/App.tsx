@@ -5,6 +5,7 @@ import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { Player } from "./components/Player/Player";
 import { useTryLogin } from "./hooks/auth";
 import { usePlayerConfig } from "./hooks/playlist";
+import { useAppConfig } from "./hooks/storage";
 import { LibraryPage } from "./pages/LibraryPage";
 import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
 import { LoginPage } from "./pages/LoginPage";
@@ -13,11 +14,17 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 function App() {
   const tryLogin = useTryLogin();
   const { config, setConfigValue } = usePlayerConfig();
+  const { appConfig, loadConfig } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
 
   useEffect(() => {
-    tryLogin().catch(() => console.log("Authomatic auth was not successfull"));
+    tryLogin().catch(() => console.warn("Authomatic auth was not successfull"));
+    loadConfig()
+      ?.then((config) => {
+        if (config.volume) setConfigValue("volume", config.volume);
+      })
+      .catch(() => console.log("No app config found"));
   }, []);
 
   return (

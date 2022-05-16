@@ -54,10 +54,13 @@ export const useAppConfig = () => {
     loadConfig();
   }, []);
 
-  const loadConfig = () => {
+  const loadConfig = (): Promise<AppConfig> => {
     const savedConfig = localStorage.getItem("config");
-    if (!savedConfig) return;
-    setAppConfig(JSON.parse(savedConfig));
+    if (!savedConfig) return new Promise((_, rej) => rej());
+
+    const config = JSON.parse(savedConfig);
+    setAppConfig(config);
+    return new Promise((res) => res(config));
   };
 
   const setConfigValue = (
