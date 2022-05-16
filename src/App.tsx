@@ -14,14 +14,14 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 function App() {
   const tryLogin = useTryLogin();
   const { config, setConfigValue } = usePlayerConfig();
-  const { appConfig, loadConfig } = useAppConfig();
+  const { loadConfig } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
 
   useEffect(() => {
     tryLogin().catch(() => console.warn("Authomatic auth was not successfull"));
     loadConfig()
-      ?.then((config) => {
+      .then((config) => {
         if (config.volume) setConfigValue("volume", config.volume);
       })
       .catch(() => console.log("No app config found"));
