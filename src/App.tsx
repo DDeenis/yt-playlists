@@ -14,7 +14,7 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 function App() {
   const tryLogin = useTryLogin();
   const { config, setConfigValue } = usePlayerConfig();
-  const { loadConfig } = useAppConfig();
+  const { loadConfig, setConfigValue: setAppConfigValue } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
 
@@ -25,6 +25,11 @@ function App() {
         if (config.volume) setConfigValue("volume", config.volume);
       })
       .catch(() => console.log("No app config found"));
+
+    setConfigValue("onVolumeChange", (volume) => {
+      setConfigValue("volume", volume);
+      setAppConfigValue("volume", volume);
+    });
   }, []);
 
   return (
