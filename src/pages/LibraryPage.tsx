@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { YTButton } from "../components/Common/YTButton";
 import { Player } from "../components/Player/Player";
 import { PlaylistsList } from "../components/Playlists/PlaylistsList";
+import { routes } from "../helpers/routes";
 import { usePlayerConfig } from "../hooks/playlist";
 import { useSavedPlaylists } from "../hooks/youtube";
 
@@ -17,7 +18,7 @@ export const LibraryPage = () => {
   return (
     <Box maxW={"container.xl"} mx="auto" py="8" px="4">
       <Box isolation={"isolate"} mb={"6"}>
-        <Link to={"/"}>
+        <Link to={routes.add}>
           <YTButton>Add playlists</YTButton>
         </Link>
       </Box>

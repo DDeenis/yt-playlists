@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { Player } from "./components/Player/Player";
+import { routes } from "./helpers/routes";
 import { useTryLogin } from "./hooks/auth";
 import { usePlayerConfig } from "./hooks/playlist";
 import { useAppConfig } from "./hooks/storage";
@@ -35,10 +36,10 @@ function App() {
   return (
     <Box w="100%" bg="black" minH="100vh" as="main">
       <Routes>
-        <Route index element={<LoadPlaylistsPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route index element={<LoginPage />} />
+        <Route path={routes.add} element={<LoadPlaylistsPage />} />
         <Route
-          path="/library"
+          path={routes.library}
           element={
             <PrivateRoute>
               <LibraryPage />
@@ -46,7 +47,7 @@ function App() {
           }
         />
         <Route
-          path="/playlist/:id"
+          path={routes.playlist(":id")}
           element={
             <PrivateRoute>
               <PlaylistPage />

@@ -1,6 +1,7 @@
 import { Box, Button, Center, Text, Textarea } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { routes } from "../../helpers/routes";
 import { YTButton } from "../Common/YTButton";
 
 type Props = {
@@ -43,7 +44,7 @@ export const LoadPlaylists = ({ onConfirm, isAuth, error }: Props) => {
       <YTButton onClick={confirmLoad}>Confirm</YTButton>
       {isAuth && (
         <YTButton>
-          <Link to={"/library"} style={{ display: "block" }}>
+          <Link to={routes.library} style={{ display: "block" }}>
             To Library
           </Link>
         </YTButton>

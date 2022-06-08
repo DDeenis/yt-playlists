@@ -2,6 +2,7 @@ import { Box, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { FaPlay, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { routes } from "../../helpers/routes";
 
 type Props = {
   playlist: gapi.client.youtube.Playlist;
@@ -10,7 +11,7 @@ type Props = {
 };
 
 export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
-  const playlistLink = `/playlist/${playlist.id}`;
+  const playlistLink = routes.playlist(playlist.id);
   const channelLink = `https://www.youtube.com/channel/${playlist.snippet?.channelId}`;
 
   const preferredImg = playlist.snippet?.thumbnails?.maxres?.url;
