@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { YTButton } from "../components/Common/YTButton";
 import { PageLoader } from "../components/Common/PageLoader";
-import { Player } from "../components/Player/Player";
 import { PlaylistInfoBlock } from "../components/Playlists/PlaylistInfoBlock";
 import { PlaylistItemsList } from "../components/Playlists/tracks/PlaylistItemsList";
 import { usePlaylist, usePlaylistVideos } from "../hooks/youtube";

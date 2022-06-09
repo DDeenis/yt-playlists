@@ -1,0 +1,8 @@
+.filter-block-label {
+  color: white;
+  margin-right: 0.75rem;
+}
+
+.filter-block-input {
+  max-width: 250px;
+}

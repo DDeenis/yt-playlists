@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { YTButton } from "../components/Common/YTButton";
-import { Player } from "../components/Player/Player";
+import { LibraryControls } from "../components/Layout/LibraryControls";
 import { PlaylistsList } from "../components/Playlists/PlaylistsList";
 import { routes } from "../helpers/routes";
 import { usePlayerConfig } from "../hooks/playlist";
@@ -11,9 +11,7 @@ export const LibraryPage = () => {
   const { playlists, removePlaylist } = useSavedPlaylists();
   const { setPlayInfo } = usePlayerConfig();
 
-  const playPlaylist = (id: string) => {
-    setPlayInfo(id, 0);
-  };
+  const playPlaylist = (id: string) => setPlayInfo(id, 0);
 
   return (
     <Box maxW={"container.xl"} mx="auto" py="8" px="4">
@@ -21,6 +19,9 @@ export const LibraryPage = () => {
         <Link to={routes.add}>
           <YTButton>Add playlists</YTButton>
         </Link>
+      </Box>
+      <Box mb={"6"}>
+        <LibraryControls />
       </Box>
       {playlists !== undefined && (
         <PlaylistsList
