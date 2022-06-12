@@ -25,7 +25,7 @@ function App() {
       .then((config) => {
         if (config.volume) setConfigValue("volume", config.volume);
       })
-      .catch(() => console.log("No app config found"));
+      .catch((reason) => console.log(reason));
 
     setConfigValue("onVolumeChange", (volume) => {
       setConfigValue("volume", volume);

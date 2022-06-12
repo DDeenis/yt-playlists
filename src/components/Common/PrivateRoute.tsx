@@ -25,9 +25,7 @@ export const PrivateRoute: React.FC<Props> = ({ redirectTo, children }) => {
 
   if (needLogin) {
     const then = location.pathname;
-    const url = redirectTo
-      ? `${redirectTo}?then=${then}`
-      : `/login?then=${then}`;
+    const url = redirectTo ? `${redirectTo}?then=${then}` : `/?then=${then}`;
     return <Navigate to={url} />;
   }
 

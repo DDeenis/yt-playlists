@@ -6,3 +6,7 @@
 .filter-block-input {
   max-width: 250px;
 }
+
+.filter-block-select option {
+  color: black;
+}

@@ -33,12 +33,6 @@ export const usePlayerConfig = () => {
     }));
   };
 
-  useEffect(() => {
-    setConfigValue("onVolumeChange", (val: number) =>
-      setConfigValue("volume", val)
-    );
-  }, []);
-
   const setPlayInfo = (playlistId: string, videoIndex = 0) => {
     setPlayerConfig((playerConfig) => ({
       ...playerConfig,
