@@ -6,7 +6,7 @@ import {
   CgPlayTrackNext,
   CgPlayTrackPrev,
 } from "react-icons/cg";
-import { formatTime } from "../../helpers/playlists";
+import { durationToTime, formatTime } from "../../helpers/playlists";
 import "./styles.css";
 
 type Props = {
@@ -28,11 +28,8 @@ export const PlayerLeftControls = ({
   onPlayPrev,
   onPlayNext,
 }: Props) => {
-  const durationMinutes = Math.floor(durationSeconds / 60);
-  const durationSecondsLeft = durationSeconds % 60;
-
-  const currentMinutes = Math.floor(currentTimeSeconds / 60);
-  const currentSeconds = currentTimeSeconds % 60;
+  const durationTime = durationToTime(durationSeconds);
+  const currentTime = durationToTime(currentTimeSeconds);
 
   const middleHandler = () => {
     isPlaying ? onPause() : onPlay();
@@ -73,8 +70,17 @@ export const PlayerLeftControls = ({
           top={"50%"}
           transform={"translateY(-50%)"}
         >
-          {formatTime(currentMinutes, currentSeconds)} /{" "}
-          {formatTime(durationMinutes, durationSecondsLeft)}
+          {formatTime(
+            currentTime.hours,
+            currentTime.minutes,
+            currentTime.seconds
+          )}{" "}
+          /{" "}
+          {formatTime(
+            durationTime.hours,
+            durationTime.minutes,
+            durationTime.seconds
+          )}
         </Text>
       </Box>
     </Box>

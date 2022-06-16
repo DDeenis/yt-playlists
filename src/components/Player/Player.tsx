@@ -131,8 +131,6 @@ export const Player = ({
       provider: "youtube",
       plugins: [],
     });
-
-    return () => playerInstance.destroy();
   }, []);
 
   useEffect(() => {

@@ -9,35 +9,52 @@ export const linksToIds = (links: string[]): string[] => {
   return idsUnique;
 };
 
-export const formatTime = (minutes: number, seconds: number) =>
-  `${minutes}:${seconds >= 10 ? seconds : "0" + seconds}`;
+const twoCharactersNumber = (num: number) => (num >= 10 ? num : "0" + num);
+
+export const formatTime = (hours: number, minutes: number, seconds: number) => {
+  const withHours = hours > 0;
+  const minutesFormatted = withHours ? twoCharactersNumber(minutes) : minutes;
+  const secondsFormatted = twoCharactersNumber(seconds);
+
+  return `${
+    withHours ? hours + ":" : ""
+  }${minutesFormatted}:${secondsFormatted}`;
+};
+
+const extractTime = (timeStr: string) => {
+  const reg = /PT(\d+)*(H(\d+)*)?(M(\d+)*)?S/g;
+  const result = reg
+    .exec(timeStr)
+    ?.map((e) => parseInt(e))
+    .filter((e) => !isNaN(e));
+
+  if (!result) {
+    return {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+  }
+
+  const hours = result[result.length - 3] ?? 0;
+  const minutes = result[result.length - 2] ?? 0;
+  const seconds = result[result.length - 1] ?? 0;
+
+  return {
+    hours,
+    minutes,
+    seconds,
+  };
+};
 
 export const formatVideoDuration = (source?: string): string => {
   if (!source) {
-    return formatTime(0, 0);
+    return formatTime(0, 0, 0);
   }
 
-  const reg = /PT(\d+)*M(\d+)*S/gm;
-  const regFallback = /PT(\d+)*S/gm;
-  const result = reg.exec(source);
-  const resultFallback = regFallback.exec(source);
+  const { hours, minutes, seconds } = extractTime(source);
 
-  if (!result && !resultFallback) {
-    return formatTime(0, 0);
-  }
-
-  let minutes = 0;
-  let seconds = 0;
-
-  if (result) {
-    minutes = parseInt(result[1]);
-    seconds = parseInt(result[2]);
-  } else if (resultFallback) {
-    minutes = 0;
-    seconds = parseInt(resultFallback[1]);
-  }
-
-  return formatTime(minutes, seconds);
+  return formatTime(hours, minutes, seconds);
 };
 
 export const durationToSeconds = (source?: string): number => {
@@ -45,27 +62,21 @@ export const durationToSeconds = (source?: string): number => {
     return 0;
   }
 
-  const reg = /PT(\d+)*M(\d+)*S/gm;
-  const regFallback = /PT(\d+)*S/gm;
-  const result = reg.exec(source);
-  const resultFallback = regFallback.exec(source);
+  const { hours, minutes, seconds } = extractTime(source);
 
-  if (!result && !resultFallback) {
-    return 0;
-  }
+  return hours * 60 * 60 + minutes * 60 + seconds;
+};
 
-  let minutes = 0;
-  let seconds = 0;
+export const durationToTime = (durationSeconds: number) => {
+  const hours = Math.floor(durationSeconds / 60 / 60);
+  const minutes = Math.floor((durationSeconds / 60) % 60);
+  const seconds = durationSeconds % 60;
 
-  if (result) {
-    minutes = parseInt(result[1]);
-    seconds = parseInt(result[2]);
-  } else if (resultFallback) {
-    minutes = 0;
-    seconds = parseInt(resultFallback[1]);
-  }
-
-  return minutes * 60 + seconds;
+  return {
+    hours,
+    minutes,
+    seconds,
+  };
 };
 
 export const convertToRange = (

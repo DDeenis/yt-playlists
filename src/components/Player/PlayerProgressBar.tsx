@@ -1,6 +1,10 @@
 import { Box, ButtonGroup, Tooltip } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { convertToRange, formatTime } from "../../helpers/playlists";
+import {
+  convertToRange,
+  durationToTime,
+  formatTime,
+} from "../../helpers/playlists";
 
 type Props = {
   durationSeconds: number;
@@ -15,8 +19,7 @@ export const PlayerProgressBar = ({
 }: Props) => {
   const [selectedSecond, setSelectedSecond] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
-  const tipMunites = Math.floor(selectedSecond / 60);
-  const tipSeconds = selectedSecond % 60;
+  const tipTime = durationToTime(selectedSecond);
   const progressWidth = convertToRange(
     currentTimeSeconds,
     0,
@@ -57,7 +60,7 @@ export const PlayerProgressBar = ({
       <Tooltip
         hasArrow
         placement="top"
-        label={formatTime(tipMunites, tipSeconds)}
+        label={formatTime(tipTime.hours, tipTime.minutes, tipTime.seconds)}
       >
         <Box
           ref={boxRef}
