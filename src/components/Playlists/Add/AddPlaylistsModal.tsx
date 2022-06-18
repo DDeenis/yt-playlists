@@ -44,7 +44,7 @@ export const AddPlaylistsModal = ({
       size={"2xl"}
       isCentered
     >
-      <ModalOverlay />
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(6px)" />
       <ModalContent bg={"black"} color={"white"}>
         <ModalHeader>Add playlists</ModalHeader>
         <ModalCloseButton />
