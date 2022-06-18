@@ -28,6 +28,14 @@ export const useLocalPlaylistsIds = () => {
     reloadPlaylists();
   };
 
+  const savePlaylists = (idsOrLinks: string[], append = false) => {
+    if (idsOrLinks.every((l) => l.startsWith("https://www.youtube.com/"))) {
+      savePlaylistsLinks(idsOrLinks);
+    } else {
+      savePlaylistsIds(idsOrLinks);
+    }
+  };
+
   useEffect(() => {
     reloadPlaylists();
   }, []);
@@ -37,6 +45,7 @@ export const useLocalPlaylistsIds = () => {
     reloadPlaylists,
     savePlaylistsLinks,
     savePlaylistsIds,
+    savePlaylists,
   };
 };
 
