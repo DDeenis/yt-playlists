@@ -8,7 +8,6 @@ import { useTryLogin } from "./hooks/auth";
 import { usePlayerConfig } from "./hooks/playlist";
 import { useAppConfig } from "./hooks/storage";
 import { LibraryPage } from "./pages/LibraryPage";
-import { LoadPlaylistsPage } from "./pages/LoadPlaylistsPage";
 import { LoginPage } from "./pages/LoginPage";
 import { PlaylistPage } from "./pages/PlaylistPage";
 
@@ -37,7 +36,6 @@ function App() {
     <Box w="100%" bg="black" minH="100vh" as="main">
       <Routes>
         <Route index element={<LoginPage />} />
-        <Route path={routes.add} element={<LoadPlaylistsPage />} />
         <Route
           path={routes.library}
           element={

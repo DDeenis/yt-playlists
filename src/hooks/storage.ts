@@ -30,9 +30,9 @@ export const useLocalPlaylistsIds = () => {
 
   const savePlaylists = (idsOrLinks: string[], append = false) => {
     if (idsOrLinks.every((l) => l.startsWith("https://www.youtube.com/"))) {
-      savePlaylistsLinks(idsOrLinks);
+      savePlaylistsLinks(idsOrLinks, append);
     } else {
-      savePlaylistsIds(idsOrLinks);
+      savePlaylistsIds(idsOrLinks, append);
     }
   };
 
