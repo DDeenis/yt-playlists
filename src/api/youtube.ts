@@ -51,3 +51,14 @@ export const getVideosWithDuration = (
 
   return getPlaylistVideos(ids);
 };
+
+export const searchPlaylists = (query: string, count = 15) => {
+  return window.gapi.client.youtube.search.list({
+    part: ["snippet"],
+    maxResults: count,
+    order: "relevance",
+    q: query,
+    safeSearch: "none",
+    type: ["playlist"],
+  });
+};

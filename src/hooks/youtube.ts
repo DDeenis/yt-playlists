@@ -5,6 +5,7 @@ import {
   getPlaylistItems,
   getPlaylistVideos,
   getVideosWithDuration,
+  searchPlaylists,
 } from "../api/youtube";
 import { mergeItemsAndVideos } from "../helpers/playlists";
 import { playlistsIdsBuffer } from "../store/playlists";
@@ -150,5 +151,29 @@ export const usePlaylistsTools = () => {
   return {
     addPlaylist,
     removePlaylist,
+  };
+};
+
+export const useSearchPlaylists = () => {
+  const [loading, setLoading] = useState(false);
+  const [playlist, setPlaylists] =
+    useState<gapi.client.youtube.SearchResult[]>();
+
+  const search = (name: string) => {
+    setLoading(true);
+    searchPlaylists(name)
+      .then((r) => {
+        setLoading(false);
+        setPlaylists(r.result.items);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  return {
+    loading,
+    playlist,
+    search,
   };
 };
