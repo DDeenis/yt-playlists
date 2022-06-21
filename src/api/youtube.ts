@@ -1,9 +1,3 @@
-type PlaylistsResponse =
-  gapi.client.Response<gapi.client.youtube.PlaylistListResponse>;
-
-type PlaylistsItemsResponse =
-  gapi.client.Response<gapi.client.youtube.PlaylistItemListResponse>;
-
 export const getPlaylists = async (urls: string[]) => {
   return window.gapi.client.youtube.playlists.list({
     part: ["id", "snippet", "contentDetails"].join(","),

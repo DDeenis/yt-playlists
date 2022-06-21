@@ -26,7 +26,7 @@ export const useGoogleAuth = () => {
             setIsAuth(true);
             localStorage.setItem("token", JSON.stringify(token));
             gapi.client.load("youtube", "v3", () => res(token));
-          }).catch(() => rej());
+          }).catch((e) => rej(e));
         }
       });
     });
@@ -43,12 +43,11 @@ export function useTryLogin() {
         const storedToken = localStorage.getItem("token");
 
         if (storedToken === null) {
-          rej();
+          rej("Stored token is null");
           return;
         }
 
         const token: GoogleApiOAuth2TokenObject = JSON.parse(storedToken);
-        // const isValid = await vaidateToken(token.access_token);
 
         // @ts-ignore
         const expiresAt = parseInt(token.expires_at) * 1000;
@@ -64,7 +63,7 @@ export function useTryLogin() {
         } else {
           setIsAuth(false);
           localStorage.removeItem("token");
-          rej();
+          rej("Token expired");
         }
       });
     });
