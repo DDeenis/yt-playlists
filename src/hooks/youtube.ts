@@ -156,13 +156,15 @@ export const usePlaylistsTools = () => {
 
 export const useSearchPlaylists = () => {
   const [loading, setLoading] = useState(false);
-  const [playlist, setPlaylists] =
+  const [playlists, setPlaylists] =
     useState<gapi.client.youtube.SearchResult[]>();
 
-  const search = (name: string) => {
+  const onSearch = (name: string) => {
     setLoading(true);
     searchPlaylists(name)
       .then((r) => {
+        console.log(r);
+
         setLoading(false);
         setPlaylists(r.result.items);
       })
@@ -173,7 +175,7 @@ export const useSearchPlaylists = () => {
 
   return {
     loading,
-    playlist,
-    search,
+    playlists,
+    onSearch,
   };
 };

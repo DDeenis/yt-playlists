@@ -16,12 +16,20 @@ import {
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { YTButton } from "../../Common/YTButton";
+import { SearchPlaylists } from "./SearchPlaylists";
 
 type Props = {
   isOpen: boolean;
   error?: string;
   onClose: () => void;
   onConfirm: (urls: string[]) => void;
+  search: {
+    loading: boolean;
+    playlists: gapi.client.youtube.SearchResult[] | undefined;
+    existingPlaylistsIds: string[];
+    addPlaylist: (id: string) => void;
+    onSearch: (name: string) => void;
+  };
 };
 
 export const AddPlaylistsModal = ({
@@ -29,6 +37,7 @@ export const AddPlaylistsModal = ({
   error,
   onClose,
   onConfirm,
+  search,
 }: Props) => {
   const [playlistsStr, setPlaylistsStr] = useState("");
   const initialRef = useRef<HTMLTextAreaElement>(null);
@@ -100,7 +109,7 @@ export const AddPlaylistsModal = ({
                 />
               </TabPanel>
               <TabPanel>
-                <p>two!</p>
+                <SearchPlaylists {...search} />
               </TabPanel>
             </TabPanels>
           </Tabs>

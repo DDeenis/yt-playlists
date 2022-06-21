@@ -5,7 +5,7 @@ import { AddPlaylistsModal } from "../components/Playlists/Add/AddPlaylistsModal
 import { PlaylistsList } from "../components/Playlists/PlaylistsList";
 import { usePlayerConfig } from "../hooks/playlist";
 import { useLocalPlaylistsIds, usePlaylistsFilter } from "../hooks/storage";
-import { useSavedPlaylists } from "../hooks/youtube";
+import { useSavedPlaylists, useSearchPlaylists } from "../hooks/youtube";
 
 export const LibraryPage = () => {
   const { playlists, removePlaylist } = useSavedPlaylists();
@@ -13,10 +13,15 @@ export const LibraryPage = () => {
   const { filter, applyFilter, createSetFilterValue } = usePlaylistsFilter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { savePlaylists, playlistsIds } = useLocalPlaylistsIds();
+  const searchPlaylists = useSearchPlaylists();
 
   const setBufferIds = (urls: string[]) => {
     const append = playlistsIds.length !== 0;
     savePlaylists(urls, append);
+  };
+
+  const addPlaylist = (id: string) => {
+    savePlaylists([id], true);
   };
 
   const filteredPlaylists = applyFilter(playlists);
@@ -46,6 +51,11 @@ export const LibraryPage = () => {
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={setBufferIds}
+        search={{
+          ...searchPlaylists,
+          existingPlaylistsIds: playlistsIds,
+          addPlaylist,
+        }}
       />
     </Box>
   );
