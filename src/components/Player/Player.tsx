@@ -135,7 +135,10 @@ export const Player = ({
 
   useEffect(() => {
     videoIndexRef.current = videoIndex ?? 0;
+
     if (playerInstance && playlistId) {
+      playerInstance.stopVideo();
+      playerInstance.clearVideo();
       playerInstance.loadPlaylist({
         list: playlistId,
         index: videoIndex,
