@@ -1,4 +1,8 @@
-.fancy-btn {
+.yt-btn-wrapper {
+  isolation: isolate;
+}
+
+.yt-btn {
   --border-width: 2px;
   --border-radius: 4px;
 
@@ -14,7 +18,7 @@
   transition: background-color 0.3s ease;
 }
 
-.fancy-btn::before {
+.yt-btn::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -29,7 +33,7 @@
   );
 }
 
-.fancy-btn:hover {
+.yt-btn:hover {
   background-color: #1a202c;
 }
 

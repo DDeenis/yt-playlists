@@ -39,7 +39,7 @@ export const PlaylistPage = () => {
 
   return playlistVideos !== undefined ? (
     <Box maxW={"container.xl"} mx={"auto"} py={"8"}>
-      <Box mb={"6"} isolation={"isolate"}>
+      <Box mb={"6"}>
         <YTButton className="playlist-back-btn" onClick={navigateLibrary}>
           <FaArrowLeft /> Back
         </YTButton>

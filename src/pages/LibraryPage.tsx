@@ -30,7 +30,7 @@ export const LibraryPage = () => {
 
   return (
     <Box maxW={"container.xl"} mx="auto" py="8" px="4">
-      <Box isolation={"isolate"} mb={"6"}>
+      <Box mb={"6"}>
         <YTButton onClick={onOpen}>Add playlists</YTButton>
       </Box>
       <Box mb={"6"}>

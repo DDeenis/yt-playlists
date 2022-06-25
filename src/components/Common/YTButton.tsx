@@ -8,8 +8,10 @@ type Props = React.DetailedHTMLProps<
 
 export const YTButton: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <button {...props} className={"fancy-btn " + props.className ?? ""}>
-      {children}
-    </button>
+    <div className="yt-btn-wrapper">
+      <button {...props} className={"yt-btn " + props.className ?? ""}>
+        {children}
+      </button>
+    </div>
   );
 };

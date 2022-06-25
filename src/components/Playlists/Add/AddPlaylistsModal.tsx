@@ -114,7 +114,7 @@ export const AddPlaylistsModal = ({
             </TabPanels>
           </Tabs>
         </ModalBody>
-        <ModalFooter isolation={"isolate"}>
+        <ModalFooter>
           <YTButton onClick={confirmLoad}>Confirm</YTButton>
         </ModalFooter>
       </ModalContent>
