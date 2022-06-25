@@ -1,21 +1,31 @@
 import { Box, Button, Center, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaUserLock } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { routes } from "../helpers/routes";
 import { useGoogleAuth } from "../hooks/auth";
+import { isAuthAtom } from "../store/auth";
 
 export const LoginPage = () => {
   const auth = useGoogleAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const isAuth = useRecoilValue(isAuthAtom);
 
   const onAuth = () => {
     const params = new URLSearchParams(location.search);
     const nextPage = params.get("then");
-    const fallbackPage = "/library";
+    const fallbackPage = routes.library;
 
     auth().then(() => (nextPage ? navigate(nextPage) : navigate(fallbackPage)));
   };
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate(routes.library);
+    }
+  }, [isAuth]);
 
   return (
     <Center h="100vh">
