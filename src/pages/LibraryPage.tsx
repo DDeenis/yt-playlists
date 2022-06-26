@@ -29,7 +29,7 @@ export const LibraryPage = () => {
   const playPlaylist = (id: string) => setPlayInfo(id, 0);
 
   return (
-    <Box maxW={"container.xl"} mx="auto" py="8" px="4">
+    <Box maxW={"container.xl"} mx="auto" py={{ lg: "8" }} px={{ lg: "4" }}>
       <Box mb={"6"}>
         <YTButton onClick={onOpen}>Add playlists</YTButton>
       </Box>

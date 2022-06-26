@@ -35,10 +35,16 @@
 
 .playlist-info-layout {
   display: grid;
-  grid-template-areas: "image info" "image actions";
+  grid-template-areas: "image info" "image info";
   grid-template-columns: 264px 1fr;
   column-gap: min(2rem, 4vw);
   row-gap: 1rem;
+}
+
+.playlist-info-layout__info {
+  grid-area: "info";
+  max-width: 720px;
+  white-space: normal;
 }
 
 .track-play-btn {
@@ -59,4 +65,19 @@
 
 .playlist-description-btn {
   cursor: pointer;
+}
+
+@media (max-width: 48em) {
+  .playlist-info-layout {
+    grid-template-areas: "image image" "info info";
+    grid-template-columns: 264px 1fr;
+  }
+
+  .playlist-info-layout > img {
+    margin-inline: auto;
+  }
+
+  .playlist-info-layout__info {
+    grid-column: span 2;
+  }
 }

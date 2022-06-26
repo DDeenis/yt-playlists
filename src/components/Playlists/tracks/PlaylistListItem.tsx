@@ -15,7 +15,9 @@ export const PlaylistListItem = ({ video, onPlay }: Props) => {
   return (
     <Box
       w={"100%"}
-      display={"flex"}
+      // display={"flex"}
+      display={{ md: "flex", base: "grid" }}
+      gridAutoFlow={"column"}
       alignItems={"center"}
       p={"1"}
       borderBottom={"1px"}
@@ -55,7 +57,13 @@ export const PlaylistListItem = ({ video, onPlay }: Props) => {
           {video.snippet?.title}
         </Text>
       </Box>
-      <Text color={"gray.400"} _hover={{ textDecoration: "underline" }}>
+      <Text
+        color={"gray.400"}
+        overflow={"hidden"}
+        whiteSpace={"nowrap"}
+        textOverflow={"ellipsis"}
+        _hover={{ textDecoration: "underline" }}
+      >
         <a href={channelLink} target={"_blank"} rel={"noopener noreferrer"}>
           {video.snippet?.channelTitle}
         </a>

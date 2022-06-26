@@ -26,7 +26,7 @@ export const PlaylistInfoBlock = ({ playlist }: Props) => {
         objectFit={"cover"}
         borderRadius={"md"}
       />
-      <Box gridArea={"info"} maxW={"720px"} whiteSpace={"normal"}>
+      <Box className={"playlist-info-layout__info"}>
         <Text
           as={"h1"}
           fontSize={"3xl"}
