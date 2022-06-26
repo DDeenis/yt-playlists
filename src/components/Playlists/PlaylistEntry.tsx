@@ -55,7 +55,7 @@ export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
           borderRadius={"md"}
           loading="lazy"
         />
-        <Box className="playlist-overlay" position={"absolute"}>
+        <Box className="playlist-overlay" opacity={{ base: "1", lg: "0" }}>
           <IconButton
             aria-label="Remove playlist"
             icon={<FaTrashAlt />}
