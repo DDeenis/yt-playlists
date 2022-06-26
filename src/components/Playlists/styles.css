@@ -9,6 +9,7 @@
 }
 
 .playlist-overlay {
+  position: absolute;
   opacity: 0;
   background-image: linear-gradient(
     to bottom,
