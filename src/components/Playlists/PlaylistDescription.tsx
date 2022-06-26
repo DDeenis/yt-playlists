@@ -19,7 +19,11 @@ export const PlaylistDescription = ({ descr = "" }: Props) => {
   return (
     <Box>
       <Box position={"relative"} overflow={"hidden"}>
-        <Text color={"gray.400"} whiteSpace={"pre"} wordBreak={"break-all"}>
+        <Text
+          color={"gray.400"}
+          whiteSpace={{ md: "pre", base: "normal" }}
+          wordBreak={{ md: "break-all", base: "normal" }}
+        >
           {visibleDescr}
         </Text>
         {isExpandable && <Box className={"playlist-description-overlay"}></Box>}

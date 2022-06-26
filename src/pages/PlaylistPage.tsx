@@ -38,7 +38,7 @@ export const PlaylistPage = () => {
   const navigateLibrary = () => navigate("/library");
 
   return playlistVideos !== undefined ? (
-    <Box maxW={"container.xl"} mx={"auto"} py={"8"}>
+    <Box maxW={"container.xl"} mx={"auto"} py={{ lg: "8" }}>
       <Box mb={"6"}>
         <YTButton className="playlist-back-btn" onClick={navigateLibrary}>
           <FaArrowLeft /> Back

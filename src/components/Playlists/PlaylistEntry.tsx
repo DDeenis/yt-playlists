@@ -98,7 +98,7 @@ export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
         </Text>
       </Link>
       <Box>
-        <Text color={"gray.300"} fontSize={14} whiteSpace="normal">
+        <Text color={"gray.300"} fontSize={14}>
           <a href={channelLink} target="_blank" rel="noopener noreferrer">
             <Text as="span" _hover={{ textDecoration: "underline" }}>
               {playlist.snippet?.channelTitle}

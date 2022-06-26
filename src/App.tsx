@@ -33,7 +33,17 @@ function App() {
   }, []);
 
   return (
-    <Box w="100%" bg="black" minH="100vh" as="main">
+    <Box
+      className="page"
+      w="100%"
+      bg="black"
+      minH="100vh"
+      padding={{
+        lg: "0",
+        base: "1rem",
+      }}
+      as="main"
+    >
       <Routes>
         <Route index element={<LoginPage />} />
         <Route
