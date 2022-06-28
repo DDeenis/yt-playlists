@@ -7,6 +7,7 @@ import {
   SliderTrack,
   Tooltip,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { FaVolumeDown, FaVolumeMute } from "react-icons/fa";
@@ -46,11 +47,13 @@ export const PlayerRightControls = ({
 
   return (
     <Box
+      className={"player-controls-right"}
       display={"flex"}
       gap={"4"}
       justifyContent={"flex-end"}
       alignItems={"center"}
       color={"gray.400"}
+      pos={"relative"}
       onMouseLeave={onClose}
     >
       <Fade in={isOpen} unmountOnExit>
@@ -79,7 +82,7 @@ export const PlayerRightControls = ({
           </Tooltip>
         </Slider>
       </Fade>
-      <button onMouseOver={onOpen}>
+      <button onMouseOver={onOpen} className={"volume-btn"}>
         {volume === 0 ? (
           <FaVolumeMute className="player-right-controls" />
         ) : (

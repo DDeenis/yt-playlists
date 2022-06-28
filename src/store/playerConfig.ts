@@ -12,7 +12,7 @@ export const playerConfigAtom = atom<PlayerConfig>({
   key: "player-config",
   default: {
     visible: false,
-    volume: 50,
+    volume: 100,
     onVolumeChange: () => {},
   },
 });

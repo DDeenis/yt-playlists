@@ -62,6 +62,7 @@ export const PlaylistListItem = ({ video, onPlay }: Props) => {
         overflow={"hidden"}
         whiteSpace={"nowrap"}
         textOverflow={"ellipsis"}
+        mr={{ base: "2", md: "0" }}
         _hover={{ textDecoration: "underline" }}
       >
         <a href={channelLink} target={"_blank"} rel={"noopener noreferrer"}>

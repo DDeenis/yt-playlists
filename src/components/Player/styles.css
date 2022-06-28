@@ -30,3 +30,14 @@
 .color-white {
   color: white;
 }
+
+@media screen and (max-width: 48rem) {
+  .player-layout {
+    grid-template-columns: 110px 1fr 30px;
+    column-gap: 8px;
+  }
+
+  .volume-btn {
+    display: none;
+  }
+}
