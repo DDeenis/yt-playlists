@@ -6,23 +6,25 @@ import { YoutubeVideo } from "../../../hooks/youtube";
 
 type Props = {
   video: YoutubeVideo;
+  isPlayingNow: boolean;
   onPlay: () => void;
 };
 
-export const PlaylistListItem = ({ video, onPlay }: Props) => {
+export const PlaylistListItem = ({ video, isPlayingNow, onPlay }: Props) => {
   const channelLink = `https://www.youtube.com/channel/${video.snippet?.channelId}`;
 
   return (
     <Box
       w={"100%"}
-      // display={"flex"}
       display={{ md: "flex", base: "grid" }}
       gridAutoFlow={"column"}
       alignItems={"center"}
       p={"1"}
+      bg={isPlayingNow ? "gray.800" : "black"}
       borderBottom={"1px"}
       borderStyle={"solid"}
       borderColor={"gray.800"}
+      borderRadius={"sm"}
     >
       <Box position={"relative"} mr={"6"} className={"track-image-container"}>
         <Image
