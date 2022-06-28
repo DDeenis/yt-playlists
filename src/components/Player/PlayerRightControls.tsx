@@ -60,7 +60,7 @@ export const PlayerRightControls = ({
         <Slider
           min={0}
           max={100}
-          defaultValue={volume}
+          value={volume}
           orientation={"horizontal"}
           w={"100px"}
           onChange={onSliderChange}

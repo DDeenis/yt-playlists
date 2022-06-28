@@ -10,6 +10,8 @@ type Props = {
   onPlay: (id?: string) => void;
   loadVideos: () => void;
   hasMore: boolean;
+  currentVideoIndex?: number;
+  playlistId?: string;
 };
 
 export const PlaylistItemsList = ({
@@ -17,6 +19,8 @@ export const PlaylistItemsList = ({
   onPlay,
   loadVideos,
   hasMore,
+  currentVideoIndex,
+  playlistId,
 }: Props) => {
   const createOnPlay = (id?: string) => () => onPlay(id);
 
@@ -28,8 +32,15 @@ export const PlaylistItemsList = ({
         loader={<ItemsLoader />}
         hasMore={hasMore}
       >
-        {videos.map((v) => (
-          <PlaylistListItem video={v} onPlay={createOnPlay(v.id)} key={v.id} />
+        {videos.map((v, i) => (
+          <PlaylistListItem
+            video={v}
+            isPlayingNow={
+              currentVideoIndex === i && v.snippet?.playlistId === playlistId
+            }
+            onPlay={createOnPlay(v.id)}
+            key={v.id}
+          />
         ))}
       </InfiniteScroll>
     </Box>
