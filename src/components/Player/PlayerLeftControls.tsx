@@ -37,8 +37,9 @@ export const PlayerLeftControls = ({
 
   return (
     <Box
+      className={"player-controls-left"}
       display={"flex"}
-      justifyContent={"space-between"}
+      justifyContent={{ lg: "space-between" }}
       alignItems={"center"}
       color={"white"}
     >
@@ -61,7 +62,11 @@ export const PlayerLeftControls = ({
       <button onClick={onPlayNext}>
         <CgPlayTrackNext className="player-next-prev-btn play-controls-btn" />
       </button>
-      <Box w={"140px"} position={"relative"}>
+      <Box
+        w={{ md: "140px", base: "max-content" }}
+        display={{ base: "none", lg: "block" }}
+        position={"relative"}
+      >
         <Text
           color={"gray.400"}
           fontWeight={"semibold"}
@@ -69,6 +74,7 @@ export const PlayerLeftControls = ({
           left={0}
           top={"50%"}
           transform={"translateY(-50%)"}
+          whiteSpace={"nowrap"}
         >
           {formatTime(
             currentTime.hours,

@@ -165,7 +165,7 @@ export const Player = ({
       inset={"auto 0 0 0"}
       bg={"gray.900"}
       py={"4"}
-      px={"8"}
+      px={{ lg: "8", base: "2" }}
       className={"player-layout"}
       style={{ display: visible ? "grid" : "none" }}
     >
