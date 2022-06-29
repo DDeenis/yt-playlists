@@ -52,6 +52,7 @@ export const SearchPlaylists = ({
                   : false
               }
               onAdd={addPlaylist}
+              key={p.id?.videoId}
             />
           ))}
         {(!playlists || playlists.length === 0) && !loading && (

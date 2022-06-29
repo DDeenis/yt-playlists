@@ -1,4 +1,5 @@
 import React from "react";
+import { YoutubeRepeatState } from "../types/playlists";
 
 export const linksToIds = (links: string[]): string[] => {
   const ids = links
@@ -112,4 +113,16 @@ export const mergeItemsAndVideos = (
     ...playlistItems[i],
     duration: v.contentDetails?.duration,
   }));
+};
+
+export const toggleRepeat = (
+  currentValue: YoutubeRepeatState
+): YoutubeRepeatState => {
+  if (currentValue === YoutubeRepeatState.none) {
+    return YoutubeRepeatState.playlist;
+  } else if (currentValue === YoutubeRepeatState.playlist) {
+    return YoutubeRepeatState.video;
+  } else {
+    return YoutubeRepeatState.none;
+  }
 };
