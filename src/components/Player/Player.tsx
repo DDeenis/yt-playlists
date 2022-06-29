@@ -7,13 +7,15 @@ import { useVideo } from "../../hooks/youtube";
 import {
   durationToSeconds,
   replayIfAllowed,
+  toggleRepeat,
   videoIdFromUrl,
 } from "../../helpers/playlists";
 import { PlayerLeftControls } from "./PlayerLeftControls";
 import { PlayerProgressBar } from "./PlayerProgressBar";
 import { PlayerMiddleControls } from "./PlayerMiddleControls";
 import { PlayerRightControls } from "./PlayerRightControls";
-import { useRepeatState, YoutubeRepeatState } from "../../hooks/playlist";
+import { useRepeatState } from "../../hooks/playlist";
+import { YoutubeRepeatState } from "../../types/playlists";
 
 type Props = {
   playlistId?: string;
@@ -29,6 +31,11 @@ try {
 } catch (error) {
   console.error("Failed to register youtube provider");
 }
+
+const volumeMin = 0;
+const volumeMax = 100;
+const volumeStep = 5;
+const secondsStep = 10;
 
 export const Player = ({
   playlistId,
@@ -80,7 +87,73 @@ export const Player = ({
     setCurrentTime(seconds);
   };
 
+  // keyboard shortcuts
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const {
+        key,
+        // @ts-ignore
+        target: { tagName },
+      } = e;
+
+      if (tagName === "INPUT" || tagName === "TEXTAREA") return;
+
+      e.preventDefault();
+
+      switch (key) {
+        case " ":
+        case "Space":
+          isPlaying ? onPause() : onPlay();
+          break;
+
+        case "ArrowUp":
+          onVolumeChange(
+            volume + volumeStep > volumeMax ? volumeMax : volume + volumeStep
+          );
+          break;
+
+        case "ArrowDown":
+          onVolumeChange(
+            volume - volumeStep < volumeMin ? volumeMin : volume - volumeStep
+          );
+          break;
+
+        case "ArrowRight":
+          onSeek(currentTime + secondsStep);
+          break;
+
+        case "ArrowLeft":
+          onSeek(currentTime - secondsStep);
+          break;
+
+        case "r":
+        case "R":
+          setRepeatState(toggleRepeat(repeatState));
+          break;
+
+        case "q":
+        case "Q":
+          onPlayPrev();
+          break;
+
+        case "w":
+        case "W":
+          onPlayNext();
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isPlaying, currentTime, repeatState]);
+
+  // player initialization and events handlings
+  useEffect(() => {
+    // TODO: fix this
     new Vlitejs("#player", {
       options: {
         autoplay: false,

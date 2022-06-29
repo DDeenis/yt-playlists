@@ -163,8 +163,6 @@ export const useSearchPlaylists = () => {
     setLoading(true);
     searchPlaylists(name)
       .then((r) => {
-        console.log(r);
-
         setLoading(false);
         setPlaylists(r.result.items);
       })

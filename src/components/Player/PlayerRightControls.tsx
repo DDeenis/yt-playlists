@@ -7,12 +7,12 @@ import {
   SliderTrack,
   Tooltip,
   useDisclosure,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { FaVolumeDown, FaVolumeMute } from "react-icons/fa";
 import { MdRepeat, MdRepeatOne } from "react-icons/md";
-import { YoutubeRepeatState } from "../../hooks/playlist";
+import { toggleRepeat } from "../../helpers/playlists";
+import { YoutubeRepeatState } from "../../types/playlists";
 
 type Props = {
   volume: number;
@@ -36,13 +36,8 @@ export const PlayerRightControls = ({
 
   const onSliderChange = (val: number) => onVolumeChange(val);
   const onRepeatToggle = () => {
-    if (repeatState === YoutubeRepeatState.none) {
-      onRepeat(YoutubeRepeatState.playlist);
-    } else if (repeatState === YoutubeRepeatState.playlist) {
-      onRepeat(YoutubeRepeatState.video);
-    } else {
-      onRepeat(YoutubeRepeatState.none);
-    }
+    const newVal = toggleRepeat(repeatState);
+    onRepeat(newVal);
   };
 
   return (

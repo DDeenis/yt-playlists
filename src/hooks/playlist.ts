@@ -1,12 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { PlayerConfig, playerConfigAtom } from "../store/playerConfig";
-
-export enum YoutubeRepeatState {
-  none,
-  playlist,
-  video,
-}
+import { YoutubeRepeatState } from "../types/playlists";
 
 export const useRepeatState = () => {
   const [repeatState, setState] = useState(YoutubeRepeatState.none);
