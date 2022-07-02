@@ -89,6 +89,8 @@ export const Player = ({
 
   // keyboard shortcuts
   useEffect(() => {
+    if (!visible) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       const {
         key,
