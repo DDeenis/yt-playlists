@@ -23,6 +23,7 @@ type Props = {
   volume?: number;
   visible?: boolean;
   onVolumeChange: (volume: number) => void;
+  onNextTrack: () => void;
   setVisible: (val: boolean) => void;
 };
 
@@ -31,6 +32,12 @@ try {
 } catch (error) {
   console.error("Failed to register youtube provider");
 }
+
+const VIDEO_NOT_STARTED = -1;
+const VIDEO_ENDED = 0;
+const VIDEO_PLAYING = 1;
+const VIDEO_PAUSED = 2;
+const VIDEO_BUFFERING = 3;
 
 const volumeMin = 0;
 const volumeMax = 100;
@@ -41,9 +48,10 @@ export const Player = ({
   playlistId,
   videoIndex,
   volume = 50,
-  onVolumeChange,
   visible,
   setVisible,
+  onVolumeChange,
+  onNextTrack,
 }: Props) => {
   const skipNextReplayRef = useRef(false);
   const videoIndexRef = useRef<number>(videoIndex ?? 0);
@@ -86,17 +94,23 @@ export const Player = ({
     playerInstance.seekTo(seconds, true);
     setCurrentTime(seconds);
   };
+  const onSeekSynced = (fn: (prevSeconds: number) => number) => {
+    setCurrentTime((prev) => {
+      const newVal = fn(prev);
+      playerInstance.seekTo(newVal, true);
+      return newVal;
+    });
+  };
 
   // keyboard shortcuts
   useEffect(() => {
-    if (!visible) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
       const {
         key,
         // @ts-ignore
         target: { tagName },
       } = e;
+      console.log(key);
 
       if (tagName === "INPUT" || tagName === "TEXTAREA") return;
 
@@ -121,11 +135,11 @@ export const Player = ({
           break;
 
         case "ArrowRight":
-          onSeek(currentTime + secondsStep);
+          onSeekSynced((currentTime) => currentTime + secondsStep);
           break;
 
         case "ArrowLeft":
-          onSeek(currentTime - secondsStep);
+          onSeekSynced((currentTime) => currentTime - secondsStep);
           break;
 
         case "r":
@@ -151,7 +165,7 @@ export const Player = ({
     document.addEventListener("keydown", handleKeyDown);
 
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isPlaying, currentTime, repeatState]);
+  }, [isPlaying, repeatState]);
 
   // player initialization and events handlings
   useEffect(() => {
@@ -169,36 +183,60 @@ export const Player = ({
           "onStateChange",
           function (state: { target: any; data: number }) {
             const { data } = state;
+            console.log(data);
 
-            if (data === -1) {
-              if (repeatStateRef.current === YoutubeRepeatState.video) {
-                replayIfAllowed(skipNextReplayRef, () => {
-                  player.instance.loadPlaylist({
-                    list: playlistId,
-                    index: videoIndexRef.current,
-                    suggestedQuality: "small",
-                  });
-                });
-              }
-            } else if (data === 0) {
-              if (repeatStateRef.current === YoutubeRepeatState.playlist) {
-                replayIfAllowed(skipNextReplayRef, () => {
-                  player.instance.loadPlaylist({
-                    list: playlistId,
-                    suggestedQuality: "small",
-                  });
-                });
-              } else {
-                setVisible(false);
-              }
-            } else if (data === 1) {
-              setIsPlaying(true);
-              setVisible(true);
-            } else if (data === 2) {
-              setIsPlaying(false);
-            } else if (data === 3) {
-              const videoId = videoIdFromUrl(player.instance.getVideoUrl());
-              videoId && loadVideo(videoId);
+            switch (data) {
+              case VIDEO_NOT_STARTED:
+                {
+                  if (repeatStateRef.current === YoutubeRepeatState.video) {
+                    replayIfAllowed(skipNextReplayRef, () => {
+                      player.instance.loadPlaylist({
+                        list: playlistId,
+                        index: videoIndexRef.current,
+                        suggestedQuality: "small",
+                      });
+                    });
+                  }
+                }
+                break;
+
+              case VIDEO_ENDED:
+                {
+                  if (repeatStateRef.current === YoutubeRepeatState.playlist) {
+                    replayIfAllowed(skipNextReplayRef, () => {
+                      player.instance.loadPlaylist({
+                        list: playlistId,
+                        suggestedQuality: "small",
+                      });
+                    });
+                  } else {
+                    setVisible(false);
+                  }
+                }
+                break;
+
+              case VIDEO_PLAYING:
+                {
+                  setIsPlaying(true);
+                  setVisible(true);
+                }
+                break;
+
+              case VIDEO_PAUSED:
+                {
+                  setIsPlaying(false);
+                }
+                break;
+
+              case VIDEO_BUFFERING:
+                {
+                  const videoId = videoIdFromUrl(player.instance.getVideoUrl());
+                  videoId && loadVideo(videoId);
+                }
+                break;
+
+              default:
+                break;
             }
           }
         );

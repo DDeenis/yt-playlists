@@ -13,10 +13,13 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 
 function App() {
   const tryLogin = useTryLogin();
-  const { config, setConfigValue } = usePlayerConfig();
+  const { config, setConfigValue, setSyncedConfigValue } = usePlayerConfig();
   const { loadConfig, setConfigValue: setAppConfigValue } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
+  const onNextTrack = () => {
+    setSyncedConfigValue("videoIndex", (val) => (val as number) + 1);
+  };
 
   useEffect(() => {
     tryLogin().catch(() => console.warn("Authomatic auth was not successfull"));
@@ -63,7 +66,7 @@ function App() {
           }
         />
       </Routes>
-      <Player {...config} setVisible={setVisible} />
+      <Player {...config} setVisible={setVisible} onNextTrack={onNextTrack} />
     </Box>
   );
 }

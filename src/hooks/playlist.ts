@@ -28,6 +28,18 @@ export const usePlayerConfig = () => {
     }));
   };
 
+  const setSyncedConfigValue = (
+    name: keyof PlayerConfig,
+    getValue: (
+      prevValue: PlayerConfig[typeof name]
+    ) => PlayerConfig[typeof name]
+  ) => {
+    setPlayerConfig((config) => ({
+      ...config,
+      [name]: getValue(config[name]),
+    }));
+  };
+
   const setPlayInfo = (playlistId: string, videoIndex = 0) => {
     setPlayerConfig((playerConfig) => ({
       ...playerConfig,
@@ -41,5 +53,6 @@ export const usePlayerConfig = () => {
     setConfig: setPlayerConfig,
     setPlayInfo,
     setConfigValue,
+    setSyncedConfigValue,
   };
 };
