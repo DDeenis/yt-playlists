@@ -6,11 +6,17 @@ import { routes } from "../../helpers/routes";
 
 type Props = {
   playlist: gapi.client.youtube.Playlist;
+  isPlaying: boolean;
   onRemove: (id: string) => void;
   onPlay: (id: string) => void;
 };
 
-export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
+export const PlaylistEntry = ({
+  playlist,
+  isPlaying,
+  onRemove,
+  onPlay,
+}: Props) => {
   const playlistLink = routes.playlist(playlist.id);
   const channelLink = `https://www.youtube.com/channel/${playlist.snippet?.channelId}`;
 
@@ -40,7 +46,9 @@ export const PlaylistEntry = ({ playlist, onRemove, onPlay }: Props) => {
       flexDir={"column"}
       maxW={160}
       position={"relative"}
-      className="playlist-list-item"
+      className={
+        isPlaying ? "playlist-list-item__active" : "playlist-list-item"
+      }
     >
       <Link
         to={playlistLink}
