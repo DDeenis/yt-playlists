@@ -13,12 +13,12 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 
 function App() {
   const tryLogin = useTryLogin();
-  const { config, setConfigValue, setSyncedConfigValue } = usePlayerConfig();
+  const { config, setConfigValue } = usePlayerConfig();
   const { loadConfig, setConfigValue: setAppConfigValue } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
-  const onNextTrack = () => {
-    setSyncedConfigValue("videoIndex", (val) => (val as number) + 1);
+  const setTrackIndex = (index: number) => {
+    setConfigValue("videoIndex", index);
   };
 
   useEffect(() => {
@@ -66,7 +66,11 @@ function App() {
           }
         />
       </Routes>
-      <Player {...config} setVisible={setVisible} onNextTrack={onNextTrack} />
+      <Player
+        {...config}
+        setVisible={setVisible}
+        setTrackIndex={setTrackIndex}
+      />
     </Box>
   );
 }

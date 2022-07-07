@@ -115,6 +115,7 @@ export const usePlaylistsFilter = () => {
     if (!playlists) return playlists;
 
     let filtered = playlists;
+    const isSortDescending = filter.orderBy === "descending";
 
     if (filter.filter) {
       filtered = filtered.filter((pl) => {
@@ -131,8 +132,8 @@ export const usePlaylistsFilter = () => {
       const aTitle = String(a.snippet?.title);
       const bTitle = String(b.snippet?.title);
 
-      if (filter.orderBy === "descending") return bTitle > aTitle ? -1 : 1;
-      else return aTitle > bTitle ? -1 : 1;
+      if (isSortDescending) return bTitle > aTitle ? -1 : 1;
+      return aTitle > bTitle ? -1 : 1;
     });
   };
 

@@ -23,7 +23,7 @@ type Props = {
   volume?: number;
   visible?: boolean;
   onVolumeChange: (volume: number) => void;
-  onNextTrack: () => void;
+  setTrackIndex: (index: number) => void;
   setVisible: (val: boolean) => void;
 };
 
@@ -51,7 +51,7 @@ export const Player = ({
   visible,
   setVisible,
   onVolumeChange,
-  onNextTrack,
+  setTrackIndex,
 }: Props) => {
   const skipNextReplayRef = useRef(false);
   const videoIndexRef = useRef<number>(videoIndex ?? 0);
@@ -219,6 +219,7 @@ export const Player = ({
                 {
                   setIsPlaying(true);
                   setVisible(true);
+                  setTrackIndex(player.instance.getPlaylistIndex());
                 }
                 break;
 
