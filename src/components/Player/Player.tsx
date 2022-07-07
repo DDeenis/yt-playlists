@@ -110,7 +110,6 @@ export const Player = ({
         // @ts-ignore
         target: { tagName },
       } = e;
-      console.log(key);
 
       if (tagName === "INPUT" || tagName === "TEXTAREA") return;
 
@@ -169,7 +168,6 @@ export const Player = ({
 
   // player initialization and events handlings
   useEffect(() => {
-    // TODO: fix this
     new Vlitejs("#player", {
       options: {
         autoplay: false,
@@ -183,7 +181,6 @@ export const Player = ({
           "onStateChange",
           function (state: { target: any; data: number }) {
             const { data } = state;
-            console.log(data);
 
             switch (data) {
               case VIDEO_NOT_STARTED:
@@ -282,6 +279,7 @@ export const Player = ({
       px={{ lg: "8", base: "2" }}
       className={"player-layout"}
       style={{ display: visible ? "grid" : "none" }}
+      zIndex={50}
     >
       <PlayerProgressBar
         durationSeconds={videoDurationSeconds}

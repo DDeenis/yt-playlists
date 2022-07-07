@@ -9,7 +9,10 @@ import { useSavedPlaylists, useSearchPlaylists } from "../hooks/youtube";
 
 export const LibraryPage = () => {
   const { playlists, removePlaylist } = useSavedPlaylists();
-  const { setPlayInfo } = usePlayerConfig();
+  const {
+    config: { playlistId },
+    setPlayInfo,
+  } = usePlayerConfig();
   const { filter, applyFilter, createSetFilterValue } = usePlaylistsFilter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { savePlaylists, playlistsIds } = useLocalPlaylistsIds();
@@ -43,6 +46,7 @@ export const LibraryPage = () => {
       {filteredPlaylists !== undefined && (
         <PlaylistsList
           playlists={filteredPlaylists}
+          currentPlaylistId={playlistId}
           removePlaylist={removePlaylist}
           playPlaylist={playPlaylist}
         />
