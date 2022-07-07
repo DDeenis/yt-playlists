@@ -13,7 +13,7 @@ export const PlaylistSearchEntry = ({ playlist, isAdded, onAdd }: Props) => {
 
   const handleAdd = () => {
     if (!isAdded && playlist.id?.playlistId) {
-      onAdd(playlist.id?.playlistId);
+      onAdd(playlist.id.playlistId);
     }
   };
 

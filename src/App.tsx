@@ -17,6 +17,9 @@ function App() {
   const { loadConfig, setConfigValue: setAppConfigValue } = useAppConfig();
 
   const setVisible = (val: boolean) => setConfigValue("visible", val);
+  const setTrackIndex = (index: number) => {
+    setConfigValue("videoIndex", index);
+  };
 
   useEffect(() => {
     tryLogin().catch(() => console.warn("Authomatic auth was not successfull"));
@@ -63,7 +66,11 @@ function App() {
           }
         />
       </Routes>
-      <Player {...config} setVisible={setVisible} />
+      <Player
+        {...config}
+        setVisible={setVisible}
+        setTrackIndex={setTrackIndex}
+      />
     </Box>
   );
 }
