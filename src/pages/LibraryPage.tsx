@@ -1,6 +1,6 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
 import { YTButton } from "../components/Common/YTButton";
-import { LibraryControls } from "../components/Layout/LibraryControls";
+import { LibraryControls } from "../layout/LibraryControls";
 import { AddPlaylistsModal } from "../components/Playlists/Add/AddPlaylistsModal";
 import { PlaylistsList } from "../components/Playlists/PlaylistsList";
 import { usePlayerConfig } from "../hooks/playlist";
